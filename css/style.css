@@ -76,7 +76,7 @@ label {
   margin-top: 16px;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], select {
   width: 100%;
   padding: 12px 14px;
   border: 2px solid var(--line);
@@ -85,7 +85,8 @@ input[type="text"], input[type="password"] {
   font-family: inherit;
   background: #fff;
 }
-input:focus { outline: 3px solid var(--marker-blue); outline-offset: 1px; }
+select { appearance: none; cursor: pointer; }
+input:focus, select:focus { outline: 3px solid var(--marker-blue); outline-offset: 1px; }
 
 button {
   font-family: inherit;
@@ -366,6 +367,137 @@ button:disabled { opacity: 0.6; cursor: default; }
   background: #fff;
   border-radius: 8px;
   border: 1px solid var(--line);
+}
+
+/* ---------- Codenames ---------- */
+
+.team-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+.team-col {
+  background: #fff;
+  border-radius: 8px;
+  padding: 14px;
+  border: 2px solid var(--line);
+}
+.team-col-red h2 { color: var(--marker-red); }
+.team-col-blue h2 { color: var(--marker-blue); }
+.team-player-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 14px;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.9rem;
+}
+.team-player-list li.is-spymaster::after { content: " (spymaster)"; opacity: 0.6; }
+
+.btn-team { width: 100%; margin-top: 6px; color: #fff; }
+.btn-team-red { background: var(--marker-red); }
+.btn-team-blue { background: var(--marker-blue); }
+.btn-team-red-outline, .btn-team-blue-outline {
+  background: transparent;
+  border: 2px solid currentColor;
+}
+.btn-team-red-outline { color: var(--marker-red); }
+.btn-team-blue-outline { color: var(--marker-blue); }
+
+.codenames-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "status status"
+    "board  side";
+  gap: 16px;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+.cn-status-bar {
+  grid-area: status;
+  color: var(--chalk-cream);
+  font-family: "Caveat", cursive;
+  font-size: 1.5rem;
+  display: flex;
+  gap: 18px;
+  align-items: baseline;
+}
+#cn-clue-label { font-family: "Inter", sans-serif; font-size: 1rem; opacity: 0.9; }
+#cn-guesses-label {
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  background: var(--marker-yellow);
+  color: var(--ink);
+  border-radius: 20px;
+  padding: 2px 14px;
+}
+
+.cn-board {
+  grid-area: board;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  gap: 10px;
+}
+
+.cn-card {
+  background: var(--chalk-cream);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: 2px solid var(--line);
+  word-break: break-word;
+}
+.cn-card:hover { transform: translateY(-2px); }
+.cn-card.cn-card-clickable { cursor: pointer; }
+.cn-card.cn-card-disabled { cursor: default; }
+
+.cn-card.cn-revealed-red    { background: var(--marker-red); color: #fff; border-color: var(--marker-red); }
+.cn-card.cn-revealed-blue   { background: var(--marker-blue); color: #fff; border-color: var(--marker-blue); }
+.cn-card.cn-revealed-neutral{ background: #cfc7ab; color: var(--ink); }
+.cn-card.cn-revealed-assassin{ background: var(--ink); color: var(--chalk-cream); }
+
+.cn-card.cn-spy-hint-red    { box-shadow: inset 0 0 0 3px var(--marker-red); }
+.cn-card.cn-spy-hint-blue   { box-shadow: inset 0 0 0 3px var(--marker-blue); }
+.cn-card.cn-spy-hint-assassin { box-shadow: inset 0 0 0 3px var(--ink); }
+
+.cn-side-panel {
+  grid-area: side;
+  background: var(--chalk-cream);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.cn-score { display: flex; justify-content: space-between; font-weight: 700; }
+.cn-score-red { color: var(--marker-red); }
+.cn-score-blue { color: var(--marker-blue); }
+
+#clue-form label { margin-top: 12px; }
+
+@media (max-width: 900px) {
+  .codenames-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "status"
+      "board"
+      "side";
+  }
+  .team-columns { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 720px) {

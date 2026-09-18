@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Codenames — Playing</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- ---------- Team setup ---------- -->
+  <div id="team-setup-screen" class="center-stage">
+    <div class="card" style="max-width: 640px;">
+      <h1>Pick your team</h1>
+      <p>Each team needs exactly one spymaster. Everyone else is an operative.</p>
+
+      <div class="team-columns">
+        <div class="team-col team-col-red">
+          <h2>Team Red</h2>
+          <ul id="red-list" class="team-player-list"></ul>
+          <button class="btn-team btn-team-red" id="join-red-operative">Join as operative</button>
+          <button class="btn-team btn-team-red-outline" id="join-red-spymaster">Be spymaster</button>
+        </div>
+        <div class="team-col team-col-blue">
+          <h2>Team Blue</h2>
+          <ul id="blue-list" class="team-player-list"></ul>
+          <button class="btn-team btn-team-blue" id="join-blue-operative">Join as operative</button>
+          <button class="btn-team btn-team-blue-outline" id="join-blue-spymaster">Be spymaster</button>
+        </div>
+      </div>
+
+      <button id="start-codenames-btn" class="btn-primary hidden">Start game</button>
+      <p class="error-text" id="setup-error"></p>
+    </div>
+  </div>
+
+  <!-- ---------- Board ---------- -->
+  <div id="board-screen" class="codenames-layout hidden">
+    <div id="cn-status-bar" class="cn-status-bar">
+      <span id="cn-turn-label"></span>
+      <span id="cn-clue-label"></span>
+      <span id="cn-guesses-label"></span>
+    </div>
+
+    <div id="cn-board" class="cn-board"></div>
+
+    <div id="cn-side-panel" class="cn-side-panel">
+      <div id="cn-score" class="cn-score">
+        <div class="cn-score-red"><span id="cn-red-remaining"></span> left</div>
+        <div class="cn-score-blue"><span id="cn-blue-remaining"></span> left</div>
+      </div>
+
+      <form id="clue-form" class="hidden">
+        <label for="clue-word">Clue word</label>
+        <input type="text" id="clue-word" autocomplete="off" />
+        <label for="clue-number">Number</label>
+        <input type="text" id="clue-number" inputmode="numeric" autocomplete="off" />
+        <button type="submit" class="btn-primary">Give clue</button>
+      </form>
+
+      <button id="pass-turn-btn" class="btn-secondary hidden" style="width:100%;">Pass turn</button>
+    </div>
+  </div>
+
+  <!-- ---------- End screen ---------- -->
+  <div id="cn-end-screen" class="center-stage hidden">
+    <div class="card">
+      <h1 id="cn-winner-label">Game over</h1>
+      <a href="lobby.html"><button class="btn-primary">Back to lobby</button></a>
+    </div>
+  </div>
+
+  <script type="module" src="js/codenames.js"></script>
+</body>
+</html>

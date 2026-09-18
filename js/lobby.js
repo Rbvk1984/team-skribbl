@@ -8,6 +8,7 @@ if (!session) throw new Error("no access"); // requireAccess already redirected
 const createForm = document.getElementById("create-form");
 const joinForm = document.getElementById("join-form");
 const nameInput = document.getElementById("display-name");
+const gameTypeSelect = document.getElementById("game-type-select");
 const joinCodeInput = document.getElementById("join-code");
 const waitingRoom = document.getElementById("waiting-room");
 const setupPanel = document.getElementById("setup-panel");
@@ -17,6 +18,7 @@ const startBtn = document.getElementById("start-btn");
 const errorEl = document.getElementById("lobby-error");
 
 let currentRoomId = null;
+let currentGameType = "skribbl";
 let isHost = false;
 let roomChannel = null;
 
@@ -32,7 +34,7 @@ createForm.addEventListener("submit", async (e) => {
     const code = randomRoomCode();
     const { data: room, error } = await supabase
       .from("rooms")
-      .insert({ room_code: code, host_user_id: session.user.id })
+      .insert({ room_code: code, host_user_id: session.user.id, game_type: gameTypeSelect.value })
       .select()
       .single();
 
@@ -57,7 +59,7 @@ joinForm.addEventListener("submit", async (e) => {
 
   const { data: room, error } = await supabase
     .from("rooms")
-    .select("id, status")
+    .select("id, status, game_type")
     .eq("room_code", code)
     .maybeSingle();
 
@@ -89,16 +91,21 @@ async function joinAsPlayer(roomId, displayName) {
   waitingRoom.classList.remove("hidden");
   startBtn.classList.toggle("hidden", !isHost);
 
-  const { data: room } = await supabase.from("rooms").select("room_code").eq("id", roomId).single();
+  const { data: room } = await supabase.from("rooms").select("room_code, game_type").eq("id", roomId).single();
   roomCodeLabel.textContent = room.room_code;
+  currentGameType = room.game_type;
 
   await refreshPlayers();
 
   roomChannel = connectRoomChannel(roomId, {
     onPlayersChange: refreshPlayers,
     onRoomChange: (payload) => {
-      if (payload.new.status === "choosing" || payload.new.status === "drawing") {
+      const status = payload.new.status;
+      if (currentGameType === "skribbl" && (status === "choosing" || status === "drawing")) {
         window.location.href = `game.html?room=${roomId}`;
+      }
+      if (currentGameType === "codenames" && status === "team_setup") {
+        window.location.href = `codenames.html?room=${roomId}`;
       }
     },
   });
@@ -120,7 +127,12 @@ async function refreshPlayers() {
 }
 
 startBtn.addEventListener("click", async () => {
-  window.location.href = `game.html?room=${currentRoomId}&start=1`;
+  if (currentGameType === "codenames") {
+    await supabase.from("rooms").update({ status: "team_setup" }).eq("id", currentRoomId);
+    window.location.href = `codenames.html?room=${currentRoomId}`;
+  } else {
+    window.location.href = `game.html?room=${currentRoomId}&start=1`;
+  }
 });
 
 function randomRoomCode() {

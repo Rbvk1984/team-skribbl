@@ -50,6 +50,25 @@ export function connectRoomChannel(roomId, handlers = {}) {
     );
   }
 
+  // Codenames: team/role assignments and turn state are never secret,
+  // so (unlike codenames_cards, which holds the hidden colors) these
+  // are safe to subscribe to directly.
+  if (handlers.onCodenamesPlayersChange) {
+    channel.on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "codenames_players", filter: `room_id=eq.${roomId}` },
+      handlers.onCodenamesPlayersChange
+    );
+  }
+
+  if (handlers.onGamesChange) {
+    channel.on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "codenames_games", filter: `room_id=eq.${roomId}` },
+      handlers.onGamesChange
+    );
+  }
+
   channel.subscribe();
 
   return {
