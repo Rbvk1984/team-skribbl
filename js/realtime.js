@@ -69,12 +69,39 @@ export function connectRoomChannel(roomId, handlers = {}) {
     );
   }
 
+  // Spyfall: round start/end touches spyfall_games, which holds the
+  // secret spy identity and location. Realtime's "Postgres Changes"
+  // always sends the FULL row to subscribers, so watching that table
+  // directly would either be blocked entirely by RLS (safe but
+  // useless) or leak the secret the instant it changed (unsafe) —
+  // there's no way to get it to send only the safe columns. Instead,
+  // whoever triggers a round change (host starting/ending it, or the
+  // spy guessing) sends a content-free "something changed" broadcast,
+  // and every client reacts by re-fetching through the safe
+  // spyfall_games_public view / spyfall_my_role() function themselves.
+  if (handlers.onSpyfallSignal) {
+    channel.on("broadcast", { event: "spyfall_signal" }, handlers.onSpyfallSignal);
+  }
+
+  // Suspicion votes have nothing secret in them, so a normal
+  // Postgres Changes subscription is fine here.
+  if (handlers.onSpyfallVotesChange) {
+    channel.on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "spyfall_votes", filter: `room_id=eq.${roomId}` },
+      handlers.onSpyfallVotesChange
+    );
+  }
+
   channel.subscribe();
 
   return {
     channel,
     broadcastStroke(stroke) {
       channel.send({ type: "broadcast", event: "stroke", payload: stroke });
+    },
+    broadcastSpyfallSignal() {
+      channel.send({ type: "broadcast", event: "spyfall_signal", payload: {} });
     },
     disconnect() {
       supabase.removeChannel(channel);

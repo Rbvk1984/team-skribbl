@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spyfall — Playing</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="round-screen" class="center-stage hidden">
+    <div class="card sf-card">
+      <div id="sf-timer" class="sf-timer"></div>
+
+      <div id="sf-role-box" class="sf-role-box">
+        <p class="sf-role-label" id="sf-role-label">Loading your role...</p>
+      </div>
+
+      <h2>Who's the spy?</h2>
+      <p style="font-size:0.85rem;">Tap a name to accuse them. You can change your mind any time.</p>
+      <ul id="sf-player-list" class="sf-player-list"></ul>
+
+      <form id="sf-guess-form" class="hidden">
+        <label for="sf-guess-input">Think you know the location? One guess only:</label>
+        <input type="text" id="sf-guess-input" list="sf-location-options" autocomplete="off" />
+        <datalist id="sf-location-options"></datalist>
+        <button type="submit" class="btn-primary">Guess location</button>
+      </form>
+
+      <button id="sf-end-round-btn" class="btn-secondary hidden" style="width:100%; margin-top:16px;">End round & reveal</button>
+      <p class="error-text" id="sf-error"></p>
+    </div>
+  </div>
+
+  <div id="reveal-screen" class="center-stage hidden">
+    <div class="card">
+      <h1 id="sf-winner-label"></h1>
+      <p id="sf-reveal-detail"></p>
+      <button id="sf-play-again-btn" class="btn-primary hidden">Play again</button>
+      <a href="lobby.html"><button class="btn-secondary" style="width:100%; margin-top:10px;">Back to lobby</button></a>
+    </div>
+  </div>
+
+  <script type="module" src="js/spyfall.js"></script>
+</body>
+</html>
