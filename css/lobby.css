@@ -117,13 +117,14 @@
 
 /* Art icon + per-game idle animations */
 .art-icon {
-  font-size: 50px;
-  display: block;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.2s ease-out;
 }
-.game-card:hover .art-icon, .game-card:focus-visible .art-icon {
-  transform: scale(1.14);
+.game-card:hover .art-icon,
+.game-card:focus-visible .art-icon {
+  transform: scale(1.12);
 }
 
 /* Skribbl: sway */
@@ -131,11 +132,8 @@
   animation: sway 3s ease-in-out infinite;
 }
 @keyframes sway {
-  0%,100% { transform: rotate(-8deg); }
-  50%      { transform: rotate(8deg); }
-}
-.game-card[data-game="skribbl"]:hover .art-icon {
-  animation: sway 3s ease-in-out infinite;
+  0%,100% { transform: rotate(-7deg); }
+  50%      { transform: rotate(7deg); }
 }
 
 /* Codenames: bob */
@@ -144,10 +142,10 @@
 }
 @keyframes bob {
   0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(-9px); }
+  50%      { transform: translateY(-8px); }
 }
 
-/* Spyfall: blink/pulse */
+/* Spyfall: pulse */
 .game-card[data-game="spyfall"] .art-icon {
   animation: eyeblink 2.8s ease-in-out infinite;
 }
@@ -162,8 +160,8 @@
 }
 @keyframes fan {
   0%,100% { transform: rotate(0deg); }
-  25%      { transform: rotate(-13deg); }
-  75%      { transform: rotate(13deg); }
+  25%      { transform: rotate(-12deg); }
+  75%      { transform: rotate(12deg); }
 }
 
 /* Gartic Phone: wiggle */
