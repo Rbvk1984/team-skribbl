@@ -500,6 +500,186 @@ button:disabled { opacity: 0.6; cursor: default; }
   .team-columns { grid-template-columns: 1fr; }
 }
 
+/* ---------- Spyfall ---------- */
+
+.sf-card { max-width: 480px; }
+
+.sf-timer {
+  font-family: "Caveat", cursive;
+  font-size: 2rem;
+  color: var(--marker-blue);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.sf-role-box {
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.sf-role-label { font-size: 1.3rem; font-weight: 700; margin: 0; }
+.sf-role-box.sf-is-spy { border-color: var(--marker-red); background: #fdecea; }
+.sf-role-box.sf-is-spy .sf-role-label { color: var(--marker-red); }
+
+.sf-player-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sf-player-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.sf-player-row.sf-accused-by-me { border-color: var(--marker-blue); }
+.sf-vote-count {
+  font-size: 0.8rem;
+  background: var(--marker-yellow);
+  border-radius: 12px;
+  padding: 1px 10px;
+}
+
+#sf-guess-form label { margin-top: 0; }
+
+/* ---------- Secret Hitler ---------- */
+
+.sh-layout {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 100vh;
+}
+
+.sh-tracker-bar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.sh-tracker { flex: 1; min-width: 120px; }
+.sh-tracker-label { font-size: 0.75rem; color: var(--chalk-cream); opacity: 0.7; display: block; margin-bottom: 4px; }
+.sh-track {
+  display: flex;
+  gap: 5px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 5px;
+}
+.sh-pip {
+  width: 28px; height: 28px;
+  border-radius: 5px;
+  border: 2px solid rgba(255,255,255,0.2);
+}
+.sh-pip.filled-liberal  { background: var(--marker-blue); border-color: var(--marker-blue); }
+.sh-pip.filled-fascist  { background: var(--marker-red);  border-color: var(--marker-red); }
+.sh-pip.filled-election { background: var(--marker-yellow); border-color: var(--marker-yellow); }
+
+.sh-status-bar {
+  background: var(--chalk-cream);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-family: "Caveat", cursive;
+  font-size: 1.4rem;
+  color: var(--ink);
+}
+
+.sh-role-card {
+  background: var(--chalk-cream);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  border-left: 5px solid var(--marker-blue);
+}
+.sh-role-card.sh-role-fascist { border-left-color: var(--marker-red); }
+.sh-role-card.sh-role-hitler  { border-left-color: var(--ink); }
+#sh-role-label { font-weight: 700; margin: 0 0 4px; font-size: 1.1rem; }
+.sh-role-detail { font-size: 0.85rem; color: var(--ink-soft); margin: 0; }
+
+.sh-main-area {
+  background: var(--chalk-cream);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sh-player-list {
+  list-style: none;
+  padding: 0; margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sh-player-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+}
+.sh-player-row.sh-is-president { border-color: var(--marker-blue); }
+.sh-player-row.sh-is-chancellor { border-color: var(--marker-yellow); }
+.sh-player-row.sh-is-dead { opacity: 0.4; text-decoration: line-through; }
+.sh-player-row.sh-clickable { cursor: pointer; }
+.sh-player-row.sh-clickable:hover { background: #f0f4ff; }
+.sh-tag {
+  font-size: 0.75rem;
+  border-radius: 12px;
+  padding: 2px 10px;
+}
+.sh-tag-president  { background: var(--marker-blue); color: #fff; }
+.sh-tag-chancellor { background: var(--marker-yellow); color: var(--ink); }
+.sh-tag-dead       { background: #ccc; color: #555; }
+.sh-tag-termlimit  { background: #eee; color: #999; font-size:0.7rem; }
+
+.sh-panel { background: #f5f0e4; border-radius: 8px; padding: 12px; }
+.sh-panel p { margin: 0 0 10px; font-size: 0.9rem; }
+
+.sh-vote-buttons { display: flex; gap: 10px; }
+.sh-ja-btn   { flex: 1; background: #1b7a3d; }
+.sh-nein-btn { flex: 1; border: 2px solid var(--marker-red); color: var(--marker-red); }
+
+.sh-cards { display: flex; gap: 10px; flex-wrap: wrap; }
+.sh-card {
+  flex: 1; min-width: 80px;
+  padding: 16px 10px;
+  border-radius: 8px;
+  border: 2px solid var(--line);
+  text-align: center;
+  font-weight: 700;
+  cursor: pointer;
+}
+.sh-card:hover { transform: translateY(-2px); }
+.sh-card.sh-card-liberal { background: #dbeeff; border-color: var(--marker-blue); color: var(--marker-blue); }
+.sh-card.sh-card-fascist { background: #fdecea; border-color: var(--marker-red); color: var(--marker-red); }
+.sh-card.sh-card-back { background: #eee; color: #999; cursor: default; }
+
+.sh-vote-result {
+  background: #fff3cd;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+}
+
+.sh-election-tracker { min-width: 100px; }
+.sh-pips { display: flex; gap: 5px; background: rgba(255,255,255,0.1); border-radius: 6px; padding: 5px; }
+
+
 @media (max-width: 720px) {
   .game-layout {
     grid-template-columns: 1fr;

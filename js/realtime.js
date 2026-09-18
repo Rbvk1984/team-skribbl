@@ -93,6 +93,21 @@ export function connectRoomChannel(roomId, handlers = {}) {
     );
   }
 
+  // Secret Hitler: sh_rounds is non-secret (public game log).
+  // sh_games uses the same broadcast-signal pattern as Spyfall
+  // since it holds secret deck/hand data that Realtime would leak.
+  if (handlers.onRoundsChange) {
+    channel.on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "sh_rounds", filter: `room_id=eq.${roomId}` },
+      handlers.onRoundsChange
+    );
+  }
+
+  if (handlers.onSHGameChange) {
+    channel.on("broadcast", { event: "sh_game_signal" }, handlers.onSHGameChange);
+  }
+
   channel.subscribe();
 
   return {
@@ -102,6 +117,9 @@ export function connectRoomChannel(roomId, handlers = {}) {
     },
     broadcastSpyfallSignal() {
       channel.send({ type: "broadcast", event: "spyfall_signal", payload: {} });
+    },
+    broadcastSHSignal() {
+      channel.send({ type: "broadcast", event: "sh_game_signal", payload: {} });
     },
     disconnect() {
       supabase.removeChannel(channel);
