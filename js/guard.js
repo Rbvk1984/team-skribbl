@@ -9,7 +9,7 @@ export async function requireAccess({ adminOnly = false } = {}) {
   const { data: sessionData } = await supabase.auth.getSession();
 
   if (!sessionData.session) {
-    window.location.href = "index.html";
+    window.location.href = "access.html";
     return null;
   }
 
@@ -20,7 +20,7 @@ export async function requireAccess({ adminOnly = false } = {}) {
     .maybeSingle();
 
   if (error || !rows) {
-    window.location.href = "index.html";
+    window.location.href = "access.html";
     return null;
   }
 

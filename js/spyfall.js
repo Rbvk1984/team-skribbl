@@ -58,8 +58,8 @@ async function init() {
 
   connection = connectRoomChannel(roomId, {
     onPlayersChange: refreshPlayers,
-    onSpyfallSignal: loadRoundState,
-    onSpyfallVotesChange: refreshVotes,
+    onOdd One OutSignal: loadRoundState,
+    onOdd One OutVotesChange: refreshVotes,
   });
 
   await loadRoundState();
@@ -182,7 +182,7 @@ async function guessLocation(e) {
     els.error.textContent = error.message;
     return;
   }
-  connection.broadcastSpyfallSignal();
+  connection.broadcastOdd One OutSignal();
   await loadRoundState();
 }
 
@@ -192,7 +192,7 @@ async function endRound() {
     els.error.textContent = error.message;
     return;
   }
-  connection.broadcastSpyfallSignal();
+  connection.broadcastOdd One OutSignal();
   await loadRoundState();
 }
 
@@ -202,7 +202,7 @@ async function playAgain() {
     els.error.textContent = error.message;
     return;
   }
-  connection.broadcastSpyfallSignal();
+  connection.broadcastOdd One OutSignal();
   await loadRoundState();
 }
 

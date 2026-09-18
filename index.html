@@ -1,26 +1,382 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>TeamPlay — Enter</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>TeamPlay — Private Games for Your Team</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } }
+
+    :root {
+      --bg: #0f1a14; --surface: #162010; --chalk: #f0ece0;
+      --chalk-dim: rgba(240,236,224,0.52); --accent: #3dd68c;
+      --accent-dim: rgba(61,214,140,0.14); --radius: 14px;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: "Inter", system-ui, sans-serif;
+      color: var(--chalk);
+      min-height: 100vh;
+    }
+
+    /* ---- Hero ---- */
+    .hero {
+      text-align: center;
+      padding: 64px 20px 40px;
+    }
+    .hero-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid rgba(61,214,140,0.28);
+      border-radius: 20px;
+      padding: 4px 14px;
+      margin-bottom: 18px;
+    }
+    .hero-brand {
+      font-family: "Syne", sans-serif;
+      font-size: clamp(2.4rem, 8vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .hero-brand span { color: var(--accent); }
+    .hero-sub {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      color: var(--chalk-dim);
+      max-width: 480px;
+      margin: 0 auto 36px;
+      line-height: 1.55;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      background: var(--accent);
+      color: #0f1a14;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .hero-cta:hover { background: #52e8a4; }
+    .hero-cta:active { transform: scale(0.97); }
+    .hero-cta svg { flex-shrink: 0; }
+
+    .hero-note {
+      font-size: 0.78rem;
+      color: var(--chalk-dim);
+      margin-top: 12px;
+    }
+
+    /* ---- Games section ---- */
+    .games-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 18px 60px;
+    }
+    .games-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--chalk-dim);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    /* Game card (decorative — same animations as lobby) */
+    .game-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1.5px solid rgba(255,255,255,0.07);
+      background: var(--surface);
+      opacity: 0;
+      transform: translateY(16px);
+      animation: cardEnter 0.4s ease-out forwards;
+    }
+    .game-card:nth-child(1) { animation-delay: 0.1s; }
+    .game-card:nth-child(2) { animation-delay: 0.17s; }
+    .game-card:nth-child(3) { animation-delay: 0.24s; }
+    .game-card:nth-child(4) { animation-delay: 0.31s; }
+    .game-card:nth-child(5) { animation-delay: 0.38s; }
+    @keyframes cardEnter { to { opacity: 1; transform: translateY(0); } }
+
+    .card-art {
+      height: 120px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .ca-skribbl   { background: linear-gradient(135deg,#1b4332,#0d2a1e); }
+    .ca-codenames { background: linear-gradient(135deg,#1a2a4a,#0d1929); }
+    .ca-spyfall   { background: linear-gradient(135deg,#2d1a45,#1a0d2a); }
+    .ca-sh        { background: linear-gradient(135deg,#4a1a1a,#2a0d0d); }
+    .ca-gartic    { background: linear-gradient(135deg,#1a3a2a,#0d2219); }
+
+    .art-icon {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .game-card[data-game="skribbl"]       .art-icon { animation: sway   3s ease-in-out infinite; }
+    .game-card[data-game="codenames"]     .art-icon { animation: bob    2.6s ease-in-out infinite; }
+    .game-card[data-game="spyfall"]       .art-icon { animation: blink  2.8s ease-in-out infinite; }
+    .game-card[data-game="secret_hitler"] .art-icon { animation: fan    3.5s ease-in-out infinite; }
+    .game-card[data-game="gartic_phone"]  .art-icon { animation: wiggle 2.2s ease-in-out infinite; }
+    @keyframes sway   { 0%,100%{transform:rotate(-7deg)} 50%{transform:rotate(7deg)} }
+    @keyframes bob    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    @keyframes blink  { 0%,40%,60%,100%{transform:scale(1);opacity:1} 50%{transform:scale(0.82);opacity:.45} }
+    @keyframes fan    { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-12deg)} 75%{transform:rotate(12deg)} }
+    @keyframes wiggle { 0%,100%{transform:rotate(0) translateX(0)} 20%{transform:rotate(-11deg) translateX(-4px)} 40%{transform:rotate(11deg) translateX(4px)} 60%{transform:rotate(-6deg) translateX(-2px)} 80%{transform:rotate(6deg) translateX(2px)} }
+
+    .card-pip {
+      position: absolute; top: 9px; right: 9px;
+      font-size: 10px; font-weight: 600;
+      padding: 3px 9px; border-radius: 20px;
+      background: rgba(255,255,255,0.17);
+      color: rgba(255,255,255,0.9);
+      animation: breathe 3s ease-in-out infinite;
+    }
+    @keyframes breathe { 0%,100%{opacity:.65} 50%{opacity:1} }
+    .ca-dot {
+      position: absolute; bottom:10px; left:10px;
+      width:7px; height:7px; border-radius:50%; opacity:.75;
+    }
+    .card-info { padding: 12px 13px 14px; }
+    .card-title { font-size: 13.5px; font-weight: 600; margin-bottom: 3px; }
+    .card-desc  { font-size: 11px; color: var(--chalk-dim); line-height: 1.45; }
+
+    /* ---- How it works ---- */
+    .how-section {
+      max-width: 720px;
+      margin: 0 auto 64px;
+      padding: 0 18px;
+    }
+    .how-title {
+      font-family: "Syne", sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 14px;
+    }
+    .how-step {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      border: 1px solid rgba(255,255,255,0.07);
+      text-align: center;
+    }
+    .how-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1.5px solid rgba(61,214,140,0.35);
+      color: var(--accent);
+      font-weight: 700; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .how-step-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
+    .how-step-desc  { font-size: 0.8rem; color: var(--chalk-dim); line-height: 1.5; }
+
+    /* ---- Bottom CTA ---- */
+    .bottom-cta {
+      text-align: center;
+      padding: 0 20px 80px;
+    }
+    .bottom-cta p { color: var(--chalk-dim); font-size: 0.85rem; margin-bottom: 20px; }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 640px) {
+      .hero { padding: 48px 16px 32px; }
+      .games-grid { grid-template-columns: repeat(2,1fr); gap:10px; }
+      .card-art { height: 100px; }
+      .how-steps { grid-template-columns: 1fr; gap: 10px; }
+      .how-step { display: flex; align-items: flex-start; gap: 14px; text-align: left; padding: 16px; }
+      .how-num { flex-shrink: 0; margin: 0; }
+    }
+    @media (max-width: 400px) {
+      .games-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <div class="center-stage">
-    <div class="card">
-      <div class="brand"><span class="dot"></span><h1>Team Skribbl</h1></div>
-      <p>Enter the passcode your admin gave you to get in.</p>
 
-      <form id="access-form">
-        <label for="passcode-input">Passcode</label>
-        <input type="password" id="passcode-input" autocomplete="off" required autofocus />
-        <button type="submit" id="access-submit" class="btn-primary">Enter</button>
-      </form>
-      <p class="error-text" id="access-error"></p>
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge">Private · Free · No download</div>
+  <h1 class="hero-brand">Team<span>Play</span></h1>
+  <p class="hero-sub">Five multiplayer games for your team — works on any phone or laptop, right in the browser.</p>
+  <a href="access.html" class="hero-cta">
+    Enter with passcode
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M9 4l5 5-5 5" stroke="#0f1a14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+  <p class="hero-note">Need a passcode? Ask your team admin.</p>
+</div>
+
+<!-- Games showcase -->
+<div class="games-section">
+  <p class="games-label">5 games ready to play</p>
+  <div class="games-grid">
+
+    <div class="game-card" data-game="skribbl">
+      <div class="card-art ca-skribbl">
+        <span class="art-icon">
+          <svg width="50" height="50" viewBox="0 0 54 54" fill="none">
+            <circle cx="18" cy="20" r="5" fill="#f2c14e"/><circle cx="32" cy="16" r="4" fill="#e85d4e"/>
+            <circle cx="38" cy="28" r="4" fill="#3dd68c"/><circle cx="30" cy="38" r="4" fill="#3a9edc"/>
+            <circle cx="17" cy="34" r="4" fill="#9b7fe8"/>
+            <ellipse cx="27" cy="27" rx="8" ry="8" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+            <line x1="33" y1="21" x2="44" y2="10" stroke="#f0ece0" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="card-pip">2–12</span>
+        <div class="ca-dot" style="background:#3dd68c"></div>
+      </div>
+      <div class="card-info">
+        <p class="card-title">Doodle Rush</p>
+        <p class="card-desc">Draw it while everyone races to guess</p>
+      </div>
+    </div>
+
+    <div class="game-card" data-game="codenames">
+      <div class="card-art ca-codenames">
+        <span class="art-icon">
+          <svg width="50" height="50" viewBox="0 0 54 54" fill="none">
+            <rect x="8" y="12" width="12" height="14" rx="2" fill="#e85d4e" opacity=".9"/>
+            <rect x="22" y="12" width="12" height="14" rx="2" fill="#3a9edc" opacity=".9"/>
+            <rect x="36" y="12" width="12" height="14" rx="2" fill="#f2c14e" opacity=".9"/>
+            <rect x="8" y="28" width="12" height="14" rx="2" fill="#3a9edc" opacity=".9"/>
+            <rect x="22" y="28" width="12" height="14" rx="2" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+            <rect x="36" y="28" width="12" height="14" rx="2" fill="#e85d4e" opacity=".9"/>
+            <circle cx="27" cy="35" r="5" fill="none" stroke="#f0ece0" stroke-width="2"/>
+            <line x1="31" y1="39" x2="36" y2="44" stroke="#f0ece0" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="card-pip">4–10</span>
+        <div class="ca-dot" style="background:#3a9edc"></div>
+      </div>
+      <div class="card-info">
+        <p class="card-title">Agent Grid</p>
+        <p class="card-desc">One clue word to reach your agents first</p>
+      </div>
+    </div>
+
+    <div class="game-card" data-game="spyfall">
+      <div class="card-art ca-spyfall">
+        <span class="art-icon">
+          <svg width="50" height="50" viewBox="0 0 54 54" fill="none">
+            <ellipse cx="27" cy="27" rx="20" ry="12" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+            <circle cx="27" cy="27" r="7" fill="rgba(155,127,232,0.6)" stroke="#9b7fe8" stroke-width="1.5"/>
+            <circle cx="27" cy="27" r="3.5" fill="#1a0d2a"/>
+            <circle cx="29" cy="25" r="1.5" fill="rgba(255,255,255,0.6)"/>
+          </svg>
+        </span>
+        <span class="card-pip">3–8</span>
+        <div class="ca-dot" style="background:#9b7fe8"></div>
+      </div>
+      <div class="card-info">
+        <p class="card-title">Odd One Out</p>
+        <p class="card-desc">Everyone knows the place — except the spy</p>
+      </div>
+    </div>
+
+    <div class="game-card" data-game="secret_hitler">
+      <div class="card-art ca-sh">
+        <span class="art-icon">
+          <svg width="50" height="50" viewBox="0 0 54 54" fill="none">
+            <rect x="10" y="8" width="34" height="26" rx="4" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+            <rect x="16" y="14" width="10" height="7" rx="1.5" fill="#e85d4e" opacity=".85"/>
+            <rect x="30" y="14" width="10" height="7" rx="1.5" fill="#3a9edc" opacity=".85"/>
+            <line x1="16" y1="25" x2="38" y2="25" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+            <path d="M24 34 L27 46 L30 34" stroke="#f2c14e" stroke-width="2" fill="#f2c14e" opacity=".9"/>
+          </svg>
+        </span>
+        <span class="card-pip">5–10</span>
+        <div class="ca-dot" style="background:#e85d4e"></div>
+      </div>
+      <div class="card-info">
+        <p class="card-title">Shadow Vote</p>
+        <p class="card-desc">Hidden roles, bluffing, policy wars</p>
+      </div>
+    </div>
+
+    <div class="game-card" data-game="gartic_phone">
+      <div class="card-art ca-gartic">
+        <span class="art-icon">
+          <svg width="50" height="50" viewBox="0 0 54 54" fill="none">
+            <path d="M16 12 C12 12 10 16 12 20 L15 26 C17 30 20 29 22 27 C24 31 28 35 32 37 C30 39 29 42 33 44 L39 47 C43 49 47 47 47 43 C47 43 46 34 38 26 C30 18 16 12 16 12Z" fill="rgba(45,202,165,0.3)" stroke="#2dcaa5" stroke-width="2" stroke-linejoin="round"/>
+            <circle cx="36" cy="18" r="10" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-dasharray="2 2"/>
+            <path d="M32 18 Q36 14 40 18 Q36 22 32 18Z" fill="#2dcaa5" opacity=".8"/>
+          </svg>
+        </span>
+        <span class="card-pip">3–8</span>
+        <div class="ca-dot" style="background:#2dcaa5"></div>
+      </div>
+      <div class="card-info">
+        <p class="card-title">Sketch Chain</p>
+        <p class="card-desc">Drawings drift hilariously round by round</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- How it works -->
+<div class="how-section">
+  <h2 class="how-title">How it works</h2>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <div>
+        <p class="how-step-title">Get your passcode</p>
+        <p class="how-step-desc">Ask your team admin for a personal passcode. Each person gets their own — access is private and admin-controlled.</p>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <div>
+        <p class="how-step-title">Enter & pick a game</p>
+        <p class="how-step-desc">Tap "Enter with passcode", type your code, and you're in the lobby. Pick a game and create or join a room.</p>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <div>
+        <p class="how-step-title">Share the room code</p>
+        <p class="how-step-desc">Share the 3-word room code with your team. Once everyone joins, the host clicks Start and you're playing.</p>
+      </div>
     </div>
   </div>
+</div>
 
-  <script type="module" src="js/access.js"></script>
+<!-- Bottom CTA -->
+<div class="bottom-cta">
+  <p>Ready to play? You'll need a passcode from your admin.</p>
+  <a href="access.html" class="hero-cta">
+    Enter with passcode
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9h10M9 4l5 5-5 5" stroke="#0f1a14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</div>
+
 </body>
 </html>

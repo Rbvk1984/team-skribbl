@@ -57,7 +57,7 @@ async function init() {
 
   connectRoomChannel(roomId, {
     onRoomChange: (payload) => showScreenFor(payload.new.status),
-    onCodenamesPlayersChange: refreshTeamLists,
+    onAgent GridPlayersChange: refreshTeamLists,
     onGamesChange: onGameStateChanged,
   });
 

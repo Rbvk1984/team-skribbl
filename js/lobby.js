@@ -252,8 +252,8 @@ function randomRoomCode() {
 }
 
 function gameName(type) {
-  return { skribbl:"Team Skribbl", codenames:"Codenames", spyfall:"Spyfall",
-           secret_hitler:"Secret Hitler", gartic_phone:"Gartic Phone" }[type] || type;
+  return { skribbl:"Doodle Rush", codenames:"Agent Grid", spyfall:"Odd One Out",
+           secret_hitler:"Shadow Vote", gartic_phone:"Sketch Chain" }[type] || type;
 }
 
 function showError(msg) { errorEl.textContent = msg; }
