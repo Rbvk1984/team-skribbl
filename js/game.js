@@ -212,10 +212,19 @@ async function applyRoundState(round) {
 
 async function chooseWord(word) {
   const startedAt = new Date();
-  const { data: room } = await supabase.from("rooms").select("round_seconds").eq("id", roomId).single();
+  const { data: room, error: roomReadErr } = await supabase
+    .from("rooms")
+    .select("round_seconds")
+    .eq("id", roomId)
+    .single();
+  if (roomReadErr) {
+    console.error("Failed to read room:", roomReadErr);
+    alert(`Couldn't start the round: ${roomReadErr.message}`);
+    return;
+  }
   const endsAt = new Date(startedAt.getTime() + room.round_seconds * 1000);
 
-  await supabase
+  const { error: roundErr } = await supabase
     .from("rounds")
     .update({
       selected_word: word,
@@ -224,8 +233,17 @@ async function chooseWord(word) {
       ends_at: endsAt.toISOString(),
     })
     .eq("id", currentRound.id);
+  if (roundErr) {
+    console.error("Failed to update round:", roundErr);
+    alert(`Couldn't select that word: ${roundErr.message}`);
+    return;
+  }
 
-  await supabase.from("rooms").update({ status: "drawing" }).eq("id", roomId);
+  const { error: roomErr } = await supabase.from("rooms").update({ status: "drawing" }).eq("id", roomId);
+  if (roomErr) {
+    console.error("Failed to update room status:", roomErr);
+    alert(`Round started, but room status didn't update: ${roomErr.message}`);
+  }
 }
 
 async function endRound(roundId) {
