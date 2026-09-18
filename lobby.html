@@ -184,6 +184,33 @@
   </div>
 
   <script type="module" src="js/lobby.js"></script>
+  <script>
+    // 3D tilt on game cards (desktop only)
+    if (!window.matchMedia('(hover: none)').matches) {
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.game-card').forEach(card => {
+          const icon = card.querySelector('.art-icon');
+          card.addEventListener('mousemove', e => {
+            const r = card.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width  - 0.5;
+            const y = (e.clientY - r.top)  / r.height - 0.5;
+            if (!card.classList.contains('selected')) {
+              card.style.transform   = `perspective(600px) rotateY(${x*14}deg) rotateX(${-y*10}deg) translateY(-4px)`;
+              card.style.boxShadow   = `${-x*16}px ${-y*16}px 40px var(--glow, rgba(61,214,140,0.15))`;
+            }
+            if (icon) icon.style.transform = `translate(${x*-8}px, ${y*-8}px)`;
+          });
+          card.addEventListener('mouseleave', () => {
+            card.style.transition  = 'transform 0.45s cubic-bezier(0.34,1.2,0.64,1), box-shadow 0.35s';
+            card.style.transform   = '';
+            card.style.boxShadow   = '';
+            if (icon) { icon.style.transition = 'transform 0.45s ease'; icon.style.transform = ''; }
+            setTimeout(() => { card.style.transition = ''; if (icon) icon.style.transition = ''; }, 450);
+          });
+        });
+      });
+    }
+  </script>
   <script type="module" src="js/help.js"></script>
 </body>
 </html>
