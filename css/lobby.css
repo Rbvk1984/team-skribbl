@@ -344,9 +344,13 @@
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
+  white-space: nowrap;
   transition: background 0.15s, border-color 0.15s;
 }
 .lobby-btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.28); }
+
+/* Force emoji presentation on all platforms */
+.art-icon { font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
 
 .lobby-error {
   margin-top: 14px;
