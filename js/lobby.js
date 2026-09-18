@@ -198,12 +198,39 @@ async function refreshPlayers() {
     .eq("room_id", currentRoomId)
     .order("joined_at", { ascending: true });
 
-  playerList.innerHTML = "";
-  (players || []).forEach(p => {
-    const li = document.createElement("li");
-    li.textContent = p.display_name;
-    playerList.appendChild(li);
+  const bubbleContainer = document.getElementById("player-bubbles");
+  const waitingHint = document.getElementById("waiting-hint");
+  if (!bubbleContainer) return;
+
+  const avatarColors = ["#3dd68c","#3a9edc","#9b7fe8","#e85d4e","#2dcaa5","#f2c14e"];
+  bubbleContainer.innerHTML = "";
+
+  (players || []).forEach((p, i) => {
+    const bubble = document.createElement("div");
+    bubble.className = "player-bubble";
+    bubble.style.animationDelay = `${i * 0.06}s`;
+
+    const initial = p.display_name.trim()[0].toUpperCase();
+    const color = avatarColors[i % avatarColors.length];
+
+    bubble.innerHTML = `
+      <div class="player-bubble-avatar" style="background:${color}">${initial}</div>
+      <span class="player-bubble-name">${escapeHtml(p.display_name)}</span>
+    `;
+    bubbleContainer.appendChild(bubble);
   });
+
+  if (waitingHint) {
+    waitingHint.textContent = players?.length === 1
+      ? "Waiting for more players to join..."
+      : `${players?.length} players joined — waiting for host to start`;
+  }
+}
+
+function escapeHtml(str) {
+  const d = document.createElement("div");
+  d.textContent = str;
+  return d.innerHTML;
 }
 
 // ---------- Start game ----------

@@ -8,8 +8,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/lobby.css" />
+  <link rel="stylesheet" href="css/help.css" />
 </head>
-<body class="lobby-body">
+<body class="lobby-body" data-page="lobby">
 
   <div id="setup-screen">
 
@@ -170,13 +171,19 @@
         </svg>
         Share room code
       </button>
-      <ul id="player-list" class="waiting-player-list"></ul>
+      <div id="player-bubbles" class="player-bubbles"></div>
+      <div class="waiting-pulse" id="waiting-pulse">
+        <div class="waiting-dot"></div>
+        <div class="waiting-dot"></div>
+        <div class="waiting-dot"></div>
+      </div>
       <button id="start-btn" class="lobby-btn-primary hidden" style="width:100%;">Start game</button>
-      <p class="waiting-hint">Waiting for the host to start...</p>
+      <p class="waiting-hint" id="waiting-hint">Waiting for the host to start...</p>
       <p class="error-text" id="start-error"></p>
     </div>
   </div>
 
   <script type="module" src="js/lobby.js"></script>
+  <script type="module" src="js/help.js"></script>
 </body>
 </html>

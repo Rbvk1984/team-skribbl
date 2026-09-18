@@ -205,7 +205,27 @@
     }
     .bottom-cta p { color: var(--chalk-dim); font-size: 0.85rem; margin-bottom: 20px; }
 
-    /* ---- Responsive ---- */
+    /* ---- Animated background ---- */
+    .bg-particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) scale(1); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+    }
+    .hero, .games-section, .how-section, .bottom-cta { position: relative; z-index: 1; }
     @media (max-width: 640px) {
       .hero { padding: 48px 16px 32px; }
       .games-grid { grid-template-columns: repeat(2,1fr); gap:10px; }
@@ -218,8 +238,10 @@
       .games-grid { grid-template-columns: 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="css/help.css" />
 </head>
-<body>
+<body data-page="landing">
+<div class="bg-particles" id="particles"></div>
 
 <!-- Hero -->
 <div class="hero">
@@ -378,5 +400,24 @@
   </a>
 </div>
 
+  <script type="module" src="js/help.js"></script>
+  <script>
+    const colors = ["#3dd68c","#3a9edc","#9b7fe8","#e85d4e","#2dcaa5","#f2c14e"];
+    const container = document.getElementById("particles");
+    for (let i = 0; i < 22; i++) {
+      const p = document.createElement("div");
+      p.className = "particle";
+      const size = 4 + Math.random() * 8;
+      p.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random()*100}%;
+        bottom:${-20 + Math.random()*20}%;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        animation-duration:${8 + Math.random()*12}s;
+        animation-delay:${Math.random()*10}s;
+      `;
+      container.appendChild(p);
+    }
+  </script>
 </body>
 </html>

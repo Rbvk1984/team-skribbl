@@ -177,6 +177,11 @@ async function applyRoundState(round) {
     board.clear(false);
     els.guessLog.innerHTML = "";
 
+    // Show round transition for guessers
+    if (!amDrawer) {
+      showRoundTransition(round.round_number, drawerName(round));
+    }
+
     if (amDrawer) {
       els.wordHint.textContent = `Draw: ${round.selected_word}`;
     } else {
@@ -268,7 +273,10 @@ async function onSubmitGuess(e) {
   }
   const result = Array.isArray(data) ? data[0] : data;
   logGuess("You", guess, result.correct);
-  if (result.correct) await refreshPlayers();
+  if (result.correct) {
+    showScorePop(result.points_awarded);
+    await refreshPlayers();
+  }
 }
 
 function handleGuessRow(payload) {
@@ -298,7 +306,29 @@ function setStatus(text) {
   els.statusBar.textContent = text;
 }
 
-function showFinalScreen() {
+function showRoundTransition(roundNumber, drawerName) {
+  const el = document.createElement("div");
+  el.className = "round-transition";
+  el.innerHTML = `
+    <span class="rt-round">Round ${roundNumber}</span>
+    <span class="rt-drawer">${escapeHtml(drawerName)}'s turn to draw</span>
+    <span class="rt-sub">Get ready...</span>
+  `;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2700);
+}
+
+function showScorePop(points) {
+  const el = document.createElement("div");
+  el.className = "score-pop";
+  el.textContent = `+${points}`;
+  el.style.cssText = `
+    left: ${30 + Math.random() * 40}%;
+    bottom: ${20 + Math.random() * 20}%;
+  `;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1450);
+}
   document.getElementById("game-screen").classList.add("hidden");
   els.finalScreen.classList.remove("hidden");
   els.finalScoreboard.innerHTML = "";
