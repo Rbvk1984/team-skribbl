@@ -32,6 +32,17 @@ let roomChannel      = null;
 playerLabel.textContent =
   localStorage.getItem("ts_label") ? `Playing as ${localStorage.getItem("ts_label")}` : "";
 
+// Pre-select game if player came from a specific game card on the landing page
+const pendingGame = localStorage.getItem("tp_pending_game");
+if (pendingGame) {
+  const pendingCard = document.querySelector(`.game-card[data-game="${pendingGame}"]`);
+  if (pendingCard) {
+    selectCard(pendingCard, null);
+    pendingCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+  localStorage.removeItem("tp_pending_game");
+}
+
 // ---------- Game card selection ----------
 
 document.querySelectorAll(".game-card").forEach(card => {

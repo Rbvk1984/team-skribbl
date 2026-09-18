@@ -1,28 +1,204 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>TeamPlay — Enter Passcode</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/help.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/help.css"/>
+  <link rel="stylesheet" href="css/premium.css"/>
+  <style>
+    .access-logo {
+      font-family: "Syne", sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      text-align: center;
+      margin-bottom: 28px;
+      color: #f0ece0;
+    }
+    .access-logo span { color: #3dd68c; }
+
+    .access-card {
+      background: rgba(13,26,14,0.88);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 400px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 32px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: cardUp 0.55s cubic-bezier(0.34,1.2,0.64,1) 0.15s forwards;
+    }
+    @keyframes cardUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .access-card h2 {
+      font-family: "Syne", sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #f0ece0;
+      margin: 0 0 6px;
+    }
+    .access-card > p {
+      font-size: 0.85rem;
+      color: rgba(240,236,224,0.5);
+      margin: 0 0 24px;
+      line-height: 1.55;
+    }
+    .access-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: rgba(240,236,224,0.45);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .access-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: 11px;
+      font-size: 16px;
+      font-family: "Inter", sans-serif;
+      color: #f0ece0;
+      letter-spacing: 0.06em;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      margin-bottom: 20px;
+    }
+    .access-input:focus {
+      border-color: #3dd68c;
+      box-shadow: 0 0 0 3px rgba(61,214,140,0.12);
+    }
+    .access-input::placeholder { color: rgba(240,236,224,0.22); letter-spacing: 0; }
+
+    /* Magnetic button wrapper */
+    .access-btn-wrap { display: block; }
+    .access-btn {
+      width: 100%;
+      padding: 15px;
+      background: #3dd68c;
+      color: #080f0a;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: "Inter", sans-serif;
+      border: none;
+      border-radius: 11px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.15s, box-shadow 0.2s;
+    }
+    .access-btn:hover {
+      background: #52e8a4;
+      box-shadow: 0 0 32px rgba(61,214,140,0.35);
+    }
+    .access-btn:active { transform: scale(0.98); }
+    .access-btn:disabled { opacity: 0.4; cursor: default; }
+    /* Shimmer */
+    .access-btn::after {
+      content: "";
+      position: absolute;
+      top: 0; left: -80%; bottom: 0;
+      width: 50%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: skewX(-20deg);
+      animation: btnShimmer 3s ease-in-out 0.8s infinite;
+    }
+    @keyframes btnShimmer {
+      0%   { left: -80%; }
+      25%  { left: 120%; }
+      100% { left: 120%; }
+    }
+    .access-error {
+      font-size: 0.82rem;
+      color: #e85d4e;
+      min-height: 18px;
+      margin-top: 12px;
+      text-align: center;
+    }
+    .access-back {
+      display: block;
+      text-align: center;
+      margin-top: 18px;
+      font-size: 0.8rem;
+      color: rgba(240,236,224,0.35);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .access-back:hover { color: rgba(240,236,224,0.65); }
+
+    /* Pre-selected game banner */
+    .game-banner {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: rgba(61,214,140,0.08);
+      border: 1px solid rgba(61,214,140,0.2);
+      border-radius: 9px;
+      padding: 9px 13px;
+      margin-bottom: 20px;
+      font-size: 0.82rem;
+      color: #3dd68c;
+    }
+    .game-banner.visible { display: flex; }
+    .game-banner-dot { width: 8px; height: 8px; border-radius: 50%; background: #3dd68c; flex-shrink: 0; }
+    @media (max-width: 480px) {
+      .access-card { padding: 28px 20px; border-radius: 14px; }
+    }
+  </style>
 </head>
 <body data-page="access">
-  <div class="center-stage">
-    <div class="card">
-      <div class="brand"><span class="dot"></span><h1>TeamPlay</h1></div>
-      <p>Enter the passcode your admin gave you to get in.</p>
 
-      <form id="access-form">
-        <label for="passcode-input">Passcode</label>
-        <input type="password" id="passcode-input" autocomplete="off" required autofocus />
-        <button type="submit" id="access-submit" class="btn-primary">Enter</button>
-      </form>
-      <p class="error-text" id="access-error"></p>
+<div class="aurora">
+  <div class="ab ab1"></div>
+  <div class="ab ab2"></div>
+  <div class="ab ab3"></div>
+</div>
+
+<div class="center-stage">
+  <div style="width:100%; max-width:400px;">
+    <div class="access-logo" style="opacity:0; animation: cardUp 0.5s ease-out 0.05s forwards">
+      Team<span>Play</span>
+    </div>
+    <div class="access-card">
+      <div class="game-banner" id="game-banner">
+        <div class="game-banner-dot"></div>
+        <span id="game-banner-text"></span>
+      </div>
+      <h2>Welcome back</h2>
+      <p>Enter the passcode your admin gave you to access the games.</p>
+      <label class="access-label" for="passcode-input">Passcode</label>
+      <input type="password" id="passcode-input" class="access-input" autocomplete="off" required autofocus placeholder="Your personal passcode"/>
+      <div class="access-btn-wrap">
+        <button type="button" id="access-submit" class="access-btn">Enter TeamPlay</button>
+      </div>
+      <p class="access-error" id="access-error"></p>
+      <a href="index.html" class="access-back">← Back to home</a>
     </div>
   </div>
+</div>
 
-  <script type="module" src="js/access.js"></script>
-  <script type="module" src="js/help.js"></script>
+<link rel="stylesheet" href="css/help.css"/>
+<script type="module" src="js/access.js"></script>
+<script type="module" src="js/help.js"></script>
+<script>
+  // Show pre-selected game banner if coming from landing page
+  const pending = localStorage.getItem('tp_pending_game');
+  const names = { skribbl:'Doodle Rush', codenames:'Agent Grid', spyfall:'Odd One Out', secret_hitler:'Shadow Vote', gartic_phone:'Sketch Chain' };
+  if (pending && names[pending]) {
+    const banner = document.getElementById('game-banner');
+    document.getElementById('game-banner-text').textContent = `You selected ${names[pending]} — enter your passcode to continue`;
+    banner.classList.add('visible');
+  }
+</script>
 </body>
 </html>

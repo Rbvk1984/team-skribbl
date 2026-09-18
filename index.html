@@ -601,6 +601,15 @@
 // ---- 3D Card Tilt ----
 const isMobile = window.matchMedia('(hover: none)').matches;
 
+// Save game selection to localStorage so access + lobby can pick it up
+document.querySelectorAll('.game-card[data-game]').forEach(card => {
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => {
+    localStorage.setItem('tp_pending_game', card.dataset.game);
+    window.location.href = 'access.html';
+  });
+});
+
 if (!isMobile) {
   document.querySelectorAll('.game-card').forEach(card => {
     const icon = card.querySelector('.art-icon');

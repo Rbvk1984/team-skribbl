@@ -1,0 +1,564 @@
+/* =========================================================
+   premium.css — Dark theme system for all pages
+   Load AFTER style.css, lobby.css, help.css
+   ========================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap");
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---- Core dark design tokens ---- */
+:root {
+  --bg:           #080f0a;
+  --surface:      #0d1a0e;
+  --surface-2:    #112014;
+  --glass:        rgba(13,26,14,0.82);
+  --glass-border: rgba(255,255,255,0.08);
+  --chalk:        #f0ece0;
+  --chalk-dim:    rgba(240,236,224,0.52);
+  --chalk-faint:  rgba(240,236,224,0.25);
+  --accent:       #3dd68c;
+  --accent-dim:   rgba(61,214,140,0.12);
+  --accent-glow:  rgba(61,214,140,0.28);
+  --red:          #e85d4e;
+  --blue:         #3a9edc;
+  --purple:       #9b7fe8;
+  --amber:        #f2c14e;
+  --teal:         #2dcaa5;
+  --r:            13px;
+
+  /* Override old style.css vars */
+  --board-green:      #0d1a0e;
+  --board-green-dark: #080f0a;
+  --chalk-cream:      #f0ece0;
+  --ink:              #f0ece0;
+  --ink-soft:         rgba(240,236,224,0.52);
+  --line:             rgba(255,255,255,0.08);
+  --marker-blue:      #3a9edc;
+  --marker-yellow:    #f2c14e;
+  --marker-red:       #e85d4e;
+  --radius:           13px;
+}
+
+/* ---- Base ---- */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  background: var(--bg) !important;
+  color: var(--chalk);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Aurora component ---- */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.ab {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(88px);
+  will-change: transform;
+}
+.ab1 {
+  width: 520px; height: 520px;
+  top: -120px; left: -80px;
+  background: radial-gradient(circle, rgba(61,214,140,0.22), transparent 70%);
+  animation: drift1 20s ease-in-out infinite;
+}
+.ab2 {
+  width: 400px; height: 400px;
+  top: 20%; right: -60px;
+  background: radial-gradient(circle, rgba(155,127,232,0.18), transparent 70%);
+  animation: drift2 24s ease-in-out infinite;
+}
+.ab3 {
+  width: 600px; height: 600px;
+  bottom: -180px; left: 22%;
+  background: radial-gradient(circle, rgba(45,202,165,0.14), transparent 70%);
+  animation: drift3 28s ease-in-out infinite;
+}
+.ab4 {
+  width: 320px; height: 320px;
+  top: 45%; left: 5%;
+  background: radial-gradient(circle, rgba(58,158,220,0.12), transparent 70%);
+  animation: drift4 22s ease-in-out infinite;
+}
+@keyframes drift1 { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(45px,-65px) scale(1.1)} 66%{transform:translate(-25px,35px) scale(0.92)} }
+@keyframes drift2 { 0%,100%{transform:translate(0,0) scale(1)} 40%{transform:translate(-55px,45px) scale(1.08)} 70%{transform:translate(28px,-28px) scale(0.95)} }
+@keyframes drift3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-35px,-55px) scale(1.08)} }
+@keyframes drift4 { 0%,100%{transform:translate(0,0) scale(1)} 30%{transform:translate(60px,35px) scale(1.12)} 70%{transform:translate(-30px,-20px) scale(0.9)} }
+
+/* Page content lifts above aurora */
+.page-content, .center-stage, #setup-screen, #waiting-room,
+.game-layout, .codenames-layout, .sh-layout, .admin-wrap,
+#round-screen, #reveal-screen, #draw-screen, #write-screen,
+#gp-end-screen, #sh-end-screen, #cn-end-screen, #final-screen,
+#game-screen { position: relative; z-index: 1; }
+
+/* ---- Shared: glass card ---- */
+.glass-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ---- Override old .card (cream → glass) ---- */
+.card {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.55) !important;
+  color: var(--chalk) !important;
+}
+.card h1, .card h2, .card h3 { color: var(--chalk) !important; }
+.card p { color: var(--chalk-dim) !important; }
+.brand { color: var(--chalk) !important; }
+.brand .dot { background: var(--red) !important; }
+.divider::before, .divider::after { background: var(--glass-border) !important; }
+
+/* ---- Inputs ---- */
+input[type="text"],
+input[type="password"],
+textarea,
+select {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.1) !important;
+  color: var(--chalk) !important;
+  border-radius: 10px !important;
+}
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-dim) !important;
+}
+input::placeholder, textarea::placeholder { color: var(--chalk-faint) !important; }
+label { color: var(--chalk-dim) !important; }
+
+/* ---- Buttons ---- */
+.btn-primary {
+  background: var(--accent) !important;
+  color: #080f0a !important;
+  font-weight: 700 !important;
+  border: none !important;
+  border-radius: 11px !important;
+  transition: background 0.15s, box-shadow 0.2s !important;
+}
+.btn-primary:hover:not(:disabled) {
+  background: #52e8a4 !important;
+  box-shadow: 0 0 24px var(--accent-glow) !important;
+}
+.btn-primary:disabled { opacity: 0.38 !important; }
+
+.btn-secondary {
+  background: rgba(255,255,255,0.06) !important;
+  border: 1.5px solid rgba(255,255,255,0.11) !important;
+  color: var(--chalk) !important;
+  border-radius: 11px !important;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.1) !important; }
+
+.error-text { color: var(--red) !important; }
+
+/* ============================================================
+   CENTER-STAGE  (passcode screen, end screens etc)
+   ============================================================ */
+.center-stage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: transparent !important;
+}
+
+/* ============================================================
+   WAITING ROOM
+   ============================================================ */
+#waiting-room { background: transparent !important; min-height: 100vh; }
+.waiting-card {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+  backdrop-filter: blur(14px) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5) !important;
+}
+.waiting-eyebrow, .waiting-game-label, .waiting-hint { color: var(--chalk-dim) !important; }
+.room-code-big { color: var(--accent) !important; }
+.waiting-player-list li {
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--chalk) !important;
+}
+
+/* ============================================================
+   DOODLE RUSH (SKRIBBL)
+   ============================================================ */
+.board-panel {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+#board { background: #fff !important; border: none !important; border-radius: 8px !important; }
+
+#toolbar {
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 8px;
+  gap: 10px;
+}
+.brush-size {
+  border-color: rgba(255,255,255,0.2) !important;
+  background: rgba(255,255,255,0.08) !important;
+}
+
+#scoreboard {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+#scoreboard li { color: var(--chalk) !important; }
+#scoreboard li.is-drawer { background: rgba(61,214,140,0.1) !important; }
+
+.chat-panel {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+#guess-log li { color: var(--chalk-dim); }
+#guess-log li.correct-guess { color: var(--accent) !important; font-weight: 700; }
+#guess-input {
+  background: rgba(255,255,255,0.05) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: var(--chalk) !important;
+}
+#guess-input:focus { border-color: var(--accent) !important; }
+
+/* Word choice modal */
+.modal-overlay { background: rgba(8,15,10,0.92) !important; }
+.modal-box {
+  background: rgba(13,26,14,0.96) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+}
+.modal-box h2 { color: var(--chalk) !important; }
+.word-choice-btn {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.1) !important;
+  color: var(--chalk) !important;
+  border-radius: 10px !important;
+  padding: 14px !important;
+}
+.word-choice-btn:hover {
+  background: var(--accent) !important;
+  color: #080f0a !important;
+  border-color: var(--accent) !important;
+}
+
+/* Final screen */
+#final-scoreboard li {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--chalk) !important;
+}
+
+/* ============================================================
+   AGENT GRID (CODENAMES)
+   ============================================================ */
+.codenames-layout { background: transparent !important; }
+.cn-status-bar { color: var(--chalk); }
+
+.cn-side-panel {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+.cn-score { font-size: 1.1rem; font-weight: 700; }
+.cn-score-red  { color: #ff7060 !important; }
+.cn-score-blue { color: #5ab8f5 !important; }
+
+/* Word cards */
+.cn-card {
+  background: rgba(255,255,255,0.07) !important;
+  border: 1.5px solid rgba(255,255,255,0.1) !important;
+  color: var(--chalk) !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  transition: transform 0.12s, box-shadow 0.12s !important;
+}
+.cn-card.cn-card-clickable:hover {
+  transform: translateY(-2px) !important;
+  background: rgba(255,255,255,0.13) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3) !important;
+}
+.cn-card.cn-revealed-red     { background: #c0392b !important; color: #fff !important; border-color: #c0392b !important; }
+.cn-card.cn-revealed-blue    { background: #2980b9 !important; color: #fff !important; border-color: #2980b9 !important; }
+.cn-card.cn-revealed-neutral { background: rgba(170,150,100,0.6) !important; color: #1a1a1a !important; }
+.cn-card.cn-revealed-assassin{ background: #111 !important; color: #aaa !important; border-color: #333 !important; }
+.cn-card.cn-spy-hint-red     { box-shadow: inset 0 0 0 3px rgba(232,93,78,0.65) !important; }
+.cn-card.cn-spy-hint-blue    { box-shadow: inset 0 0 0 3px rgba(58,158,220,0.65) !important; }
+.cn-card.cn-spy-hint-assassin{ box-shadow: inset 0 0 0 3px rgba(150,150,150,0.65) !important; }
+
+/* Team setup */
+.team-col {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+.team-col-red h2  { color: #ff7060 !important; }
+.team-col-blue h2 { color: #5ab8f5 !important; }
+.team-player-list li { color: var(--chalk-dim) !important; }
+
+.btn-team-red         { background: rgba(232,93,78,0.8) !important; }
+.btn-team-blue        { background: rgba(58,158,220,0.8) !important; }
+.btn-team-red-outline { border-color: rgba(232,93,78,0.5) !important; color: #ff7060 !important; background: transparent !important; }
+.btn-team-blue-outline{ border-color: rgba(58,158,220,0.5) !important; color: #5ab8f5 !important; background: transparent !important; }
+
+/* ============================================================
+   ODD ONE OUT (SPYFALL)
+   ============================================================ */
+.sf-card {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+.sf-card h2 { color: var(--chalk) !important; }
+.sf-card p  { color: var(--chalk-dim) !important; }
+
+.sf-role-box {
+  background: rgba(255,255,255,0.05) !important;
+  border: 2px solid rgba(255,255,255,0.1) !important;
+  border-radius: 10px !important;
+}
+.sf-role-box.sf-is-spy {
+  background: rgba(232,93,78,0.1) !important;
+  border-color: rgba(232,93,78,0.45) !important;
+  box-shadow: 0 0 30px rgba(232,93,78,0.12) !important;
+}
+.sf-role-label { color: var(--chalk) !important; font-size: 1.15rem !important; }
+.sf-is-spy .sf-role-label { color: var(--red) !important; }
+
+.sf-player-row {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.07) !important;
+  color: var(--chalk) !important;
+}
+.sf-player-row.sf-accused-by-me { border-color: var(--blue) !important; }
+.sf-player-row.sf-clickable:hover { background: rgba(255,255,255,0.1) !important; }
+.sf-vote-count { background: rgba(242,193,78,0.15) !important; color: var(--amber) !important; }
+
+.sf-ja-btn {
+  background: rgba(61,214,140,0.12) !important;
+  color: var(--accent) !important;
+  border: 2px solid rgba(61,214,140,0.35) !important;
+  font-size: 1.1rem !important; min-height: 54px !important;
+}
+.sf-nein-btn {
+  background: rgba(232,93,78,0.12) !important;
+  color: var(--red) !important;
+  border: 2px solid rgba(232,93,78,0.35) !important;
+  font-size: 1.1rem !important; min-height: 54px !important;
+}
+.sf-ja-btn:hover   { background: var(--accent) !important; color: #080f0a !important; box-shadow: 0 0 20px var(--accent-glow) !important; }
+.sf-nein-btn:hover { background: var(--red) !important; color: #fff !important; box-shadow: 0 0 20px rgba(232,93,78,0.3) !important; }
+
+.sf-timer { color: var(--accent) !important; font-size: 2.2rem !important; font-weight: 700 !important; }
+
+#sf-guess-input { background: rgba(255,255,255,0.05) !important; border-color: rgba(255,255,255,0.1) !important; color: var(--chalk) !important; }
+#sf-guess-input:focus { border-color: var(--accent) !important; }
+
+#reveal-screen .card { text-align: center; }
+#sf-winner-label, #sf-reveal-detail { color: var(--chalk) !important; }
+
+/* ============================================================
+   SHADOW VOTE (SECRET HITLER)
+   ============================================================ */
+.sh-layout { background: transparent !important; }
+
+.sh-track { background: rgba(255,255,255,0.05) !important; border-radius: 8px; padding: 5px; }
+.sh-pip { border-color: rgba(255,255,255,0.1) !important; background: rgba(255,255,255,0.04) !important; }
+.sh-pip.filled-liberal  { background: #2980b9 !important; border-color: #2980b9 !important; }
+.sh-pip.filled-fascist  { background: #c0392b !important; border-color: #c0392b !important; }
+.sh-pip.filled-election { background: var(--amber) !important; border-color: var(--amber) !important; }
+.sh-tracker-label { color: var(--chalk-dim) !important; }
+
+.sh-status-bar {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--chalk) !important;
+  border-radius: var(--r) !important;
+}
+
+.sh-role-card {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-left: 4px solid var(--accent) !important;
+}
+.sh-role-card.sh-role-fascist { border-left-color: var(--red) !important; }
+.sh-role-card.sh-role-hitler  { border-left-color: #555 !important; }
+#sh-role-label { color: var(--chalk) !important; }
+.sh-role-detail { color: var(--chalk-dim) !important; }
+
+.sh-main-area {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: var(--r) !important;
+}
+.sh-main-area > h2 { color: var(--chalk) !important; }
+
+.sh-player-row {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.07) !important;
+  color: var(--chalk) !important;
+}
+.sh-player-row.sh-is-president  { border-color: var(--blue) !important; }
+.sh-player-row.sh-is-chancellor { border-color: var(--amber) !important; }
+.sh-player-row.sh-clickable:hover { background: rgba(255,255,255,0.09) !important; }
+
+.sh-panel { background: rgba(255,255,255,0.04) !important; border-radius: 8px; }
+.sh-panel p { color: var(--chalk-dim) !important; }
+
+/* Vote — DRAMATIC big buttons */
+.sh-ja-btn {
+  background: rgba(61,214,140,0.12) !important;
+  color: var(--accent) !important;
+  border: 2px solid rgba(61,214,140,0.35) !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  min-height: 58px !important;
+  letter-spacing: 0.04em !important;
+}
+.sh-nein-btn {
+  background: rgba(232,93,78,0.12) !important;
+  color: var(--red) !important;
+  border: 2px solid rgba(232,93,78,0.35) !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  min-height: 58px !important;
+  letter-spacing: 0.04em !important;
+}
+.sh-ja-btn:hover   { background: var(--accent) !important; color: #080f0a !important; box-shadow: 0 0 24px var(--accent-glow) !important; }
+.sh-nein-btn:hover { background: var(--red) !important; color: #fff !important; box-shadow: 0 0 24px rgba(232,93,78,0.3) !important; }
+
+.sh-card {
+  background: rgba(255,255,255,0.06) !important;
+  border: 1.5px solid rgba(255,255,255,0.1) !important;
+}
+.sh-card.sh-card-liberal { background: rgba(41,128,185,0.18) !important; border-color: rgba(41,128,185,0.45) !important; color: #5ab8f5 !important; }
+.sh-card.sh-card-fascist { background: rgba(192,57,43,0.18) !important; border-color: rgba(192,57,43,0.45) !important; color: #ff7060 !important; }
+.sh-card:hover:not(.sh-card-back) { transform: translateY(-3px) !important; box-shadow: 0 8px 24px rgba(0,0,0,0.4) !important; }
+
+.sh-vote-result {
+  background: rgba(242,193,78,0.08) !important;
+  border: 1px solid rgba(242,193,78,0.22) !important;
+  color: var(--amber) !important;
+  border-radius: 8px !important;
+}
+
+/* Tags */
+.sh-tag-president  { background: rgba(58,158,220,0.25) !important; color: #5ab8f5 !important; }
+.sh-tag-chancellor { background: rgba(242,193,78,0.25) !important; color: var(--amber) !important; }
+.sh-tag-dead       { background: rgba(255,255,255,0.08) !important; color: var(--chalk-dim) !important; }
+
+/* ============================================================
+   SKETCH CHAIN (GARTIC PHONE)
+   ============================================================ */
+.gp-card {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+.gp-card h2 { color: var(--chalk) !important; }
+.gp-subheading { color: var(--chalk-dim) !important; }
+
+.gp-draw-prompt {
+  background: rgba(242,193,78,0.1) !important;
+  color: var(--amber) !important;
+  border: 1px solid rgba(242,193,78,0.22) !important;
+}
+.gp-textarea {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1.5px solid rgba(255,255,255,0.1) !important;
+  color: var(--chalk) !important;
+}
+.gp-textarea:focus { border-color: var(--accent) !important; }
+
+.gp-canvas  { background: #fff !important; }
+.gp-prev-canvas { background: rgba(255,255,255,0.96) !important; }
+
+.gp-brush-btn {
+  background: rgba(255,255,255,0.06) !important;
+  border: 1.5px solid rgba(255,255,255,0.14) !important;
+}
+.gp-brush-btn:hover { background: rgba(255,255,255,0.13) !important; }
+
+.gp-waiting  { color: var(--chalk-dim) !important; }
+.gp-progress { color: var(--chalk-faint) !important; }
+
+/* Reveal — cinematic */
+.gp-reveal-title { color: var(--chalk) !important; }
+.gp-slide {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+.gp-slide-author { color: var(--chalk-dim) !important; }
+.gp-slide-text   { color: var(--chalk) !important; }
+.gp-slide-canvas { background: #fff !important; }
+.gp-reveal-nav button { min-height: 46px !important; }
+
+/* ============================================================
+   ADMIN
+   ============================================================ */
+.admin-wrap { position: relative; z-index: 1; }
+.admin-wrap h1 { color: var(--chalk) !important; font-family: "Syne", sans-serif !important; }
+.admin-wrap > p { color: var(--chalk-dim) !important; }
+.admin-wrap a   { color: var(--accent) !important; }
+
+.code-row {
+  background: var(--glass) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+.code-row span { color: var(--chalk) !important; }
+.code-row button {
+  background: rgba(255,255,255,0.07) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  color: var(--chalk-dim) !important;
+  border-radius: 8px !important;
+  font-size: 0.8rem !important;
+  padding: 6px 14px !important;
+  min-height: 34px !important;
+}
+.code-row button:hover { background: rgba(255,255,255,0.12) !important; }
+.code-row-inactive { opacity: 0.4 !important; }
+
+.banner {
+  background: rgba(242,193,78,0.08) !important;
+  border: 1px solid rgba(242,193,78,0.22) !important;
+  color: var(--amber) !important;
+  border-radius: 10px !important;
+}
+
+/* ============================================================
+   HELP PANEL - polish
+   ============================================================ */
+.help-trigger {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+  backdrop-filter: blur(12px) !important;
+}
+.help-panel {
+  background: #080f0a !important;
+  border-left: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+/* ============================================================
+   SCORE POP & ROUND TRANSITION (already in style.css, polish)
+   ============================================================ */
+.round-transition { background: rgba(8,15,10,0.97) !important; }
+
+/* ============================================================
+   MOBILE — inherit dark theme on all screens
+   ============================================================ */
+@media (max-width: 640px) {
+  .card { padding: 22px 18px !important; }
+  .modal-box { background: rgba(8,15,10,0.98) !important; }
+}

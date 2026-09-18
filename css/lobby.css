@@ -551,3 +551,32 @@
   0%,80%,100% { transform: scale(0.8); opacity: 0.4; }
   40% { transform: scale(1.2); opacity: 1; }
 }
+
+/* ============================================================
+   LOBBY PREMIUM DARK OVERRIDES (loaded after premium.css)
+   ============================================================ */
+
+/* Setup screen inputs already handled by premium.css */
+.lobby-body { background: transparent !important; }
+#setup-screen { position: relative; z-index: 1; }
+.lh-sub { color: rgba(240,236,224,0.4) !important; }
+
+/* Game card shimmer on lobby too */
+.game-card .card-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: lobbyShimmer 0.65s ease-out forwards;
+  pointer-events: none;
+}
+.game-card:nth-child(1) .card-inner::after { animation-delay: 0.1s; }
+.game-card:nth-child(2) .card-inner::after { animation-delay: 0.18s; }
+.game-card:nth-child(3) .card-inner::after { animation-delay: 0.26s; }
+.game-card:nth-child(4) .card-inner::after { animation-delay: 0.34s; }
+.game-card:nth-child(5) .card-inner::after { animation-delay: 0.42s; }
+@keyframes lobbyShimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(200%); }
+}
