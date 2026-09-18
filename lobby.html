@@ -3,50 +3,115 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Team Skribbl — Lobby</title>
+  <title>Team Games — Lobby</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/lobby.css" />
 </head>
-<body>
-  <div class="center-stage">
-    <div class="card">
-      <div class="brand"><span class="dot"></span><h1>Team Skribbl</h1></div>
-      <p id="player-label"></p>
+<body class="lobby-body">
 
-      <div id="setup-panel">
-        <label for="display-name">Your name</label>
-        <input type="text" id="display-name" required autofocus />
+  <!-- ========== SETUP SCREEN ========== -->
+  <div id="setup-screen">
 
-        <label for="game-type-select">Game</label>
-        <select id="game-type-select">
-          <option value="skribbl">Team Skribbl (drawing & guessing)</option>
-          <option value="codenames">Codenames (words & clues)</option>
-          <option value="spyfall">Spyfall (find the spy)</option>
-          <option value="secret_hitler">Secret Hitler (hidden roles)</option>
-          <option value="gartic_phone">Gartic Phone (drawing telephone)</option>
-        </select>
+    <header class="lobby-header">
+      <div class="lh-brand">Team<span>Play</span></div>
+      <div class="lh-sub" id="player-label"></div>
+    </header>
 
-        <form id="create-form">
-          <button type="submit" class="btn-primary">Create a new room</button>
-        </form>
+    <p class="section-label">Choose a game</p>
 
-        <div class="divider">or join one</div>
+    <div class="games-grid" id="games-grid">
 
-        <form id="join-form">
-          <label for="join-code">Room code</label>
-          <input type="text" id="join-code" placeholder="FOX-427" />
-          <button type="submit" class="btn-secondary" style="width:100%; margin-top:12px;">Join room</button>
-        </form>
-
-        <p class="error-text" id="lobby-error"></p>
+      <div class="game-card" data-game="skribbl" data-name="Team Skribbl" tabindex="0">
+        <div class="card-art ca-skribbl">
+          <span class="art-icon">🎨</span>
+          <span class="card-pip">2 – 12</span>
+          <div class="ca-dot" style="background:#3dd68c"></div>
+        </div>
+        <div class="card-info">
+          <p class="card-title">Team Skribbl</p>
+          <p class="card-desc">Draw it while everyone races to guess</p>
+        </div>
       </div>
 
-      <div id="waiting-room" class="hidden">
-        <p>Room code — share this with your team:</p>
-        <div class="room-code-display" id="room-code-label"></div>
-        <ul id="player-list"></ul>
-        <button id="start-btn" class="btn-primary hidden">Start game</button>
-        <p style="font-size:0.85rem;">Waiting for the host to start...</p>
+      <div class="game-card" data-game="codenames" data-name="Codenames" tabindex="0">
+        <div class="card-art ca-codenames">
+          <span class="art-icon">🕵️</span>
+          <span class="card-pip">4 – 10</span>
+          <div class="ca-dot" style="background:#3a9edc"></div>
+        </div>
+        <div class="card-info">
+          <p class="card-title">Codenames</p>
+          <p class="card-desc">One clue word to reach your agents first</p>
+        </div>
       </div>
+
+      <div class="game-card" data-game="spyfall" data-name="Spyfall" tabindex="0">
+        <div class="card-art ca-spyfall">
+          <span class="art-icon">👁️</span>
+          <span class="card-pip">3 – 8</span>
+          <div class="ca-dot" style="background:#9b7fe8"></div>
+        </div>
+        <div class="card-info">
+          <p class="card-title">Spyfall</p>
+          <p class="card-desc">Everyone knows the place — except the spy</p>
+        </div>
+      </div>
+
+      <div class="game-card" data-game="secret_hitler" data-name="Secret Hitler" tabindex="0">
+        <div class="card-art ca-sh">
+          <span class="art-icon">🗳️</span>
+          <span class="card-pip">5 – 10</span>
+          <div class="ca-dot" style="background:#e85d4e"></div>
+        </div>
+        <div class="card-info">
+          <p class="card-title">Secret Hitler</p>
+          <p class="card-desc">Hidden roles, bluffing, policy wars</p>
+        </div>
+      </div>
+
+      <div class="game-card" data-game="gartic_phone" data-name="Gartic Phone" tabindex="0">
+        <div class="card-art ca-gartic">
+          <span class="art-icon">📞</span>
+          <span class="card-pip">3 – 8</span>
+          <div class="ca-dot" style="background:#2dcaa5"></div>
+        </div>
+        <div class="card-info">
+          <p class="card-title">Gartic Phone</p>
+          <p class="card-desc">Drawings drift hilariously round by round</p>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="selection-hint" id="selection-hint">← pick a game to get started</p>
+
+    <div class="lobby-controls">
+      <input type="text" id="display-name" class="lobby-input" placeholder="Your display name" autocomplete="off" />
+      <button id="create-btn" class="lobby-btn-primary" disabled>Create room</button>
+    </div>
+
+    <div class="or-row"><span>or join one</span></div>
+
+    <div class="join-row">
+      <input type="text" id="join-code" class="lobby-input-code" placeholder="Room code — e.g. FOX-427" autocomplete="off" />
+      <button id="join-btn" class="lobby-btn-ghost">Join room</button>
+    </div>
+
+    <p class="error-text lobby-error" id="lobby-error"></p>
+  </div>
+
+  <!-- ========== WAITING ROOM ========== -->
+  <div id="waiting-room" class="hidden">
+    <div class="waiting-card">
+      <p class="waiting-eyebrow">Room code — share with your team</p>
+      <div class="room-code-big" id="room-code-label"></div>
+      <div class="waiting-game-label" id="waiting-game-label"></div>
+      <ul id="player-list" class="waiting-player-list"></ul>
+      <button id="start-btn" class="lobby-btn-primary hidden" style="width:100%;">Start game</button>
+      <p class="waiting-hint">Waiting for the host to start...</p>
+      <p class="error-text" id="start-error"></p>
     </div>
   </div>
 

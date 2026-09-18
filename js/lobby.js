@@ -3,38 +3,77 @@ import { requireAccess } from "./guard.js";
 import { connectRoomChannel } from "./realtime.js";
 
 const session = await requireAccess();
-if (!session) throw new Error("no access"); // requireAccess already redirected
+if (!session) throw new Error("no access");
 
-const createForm = document.getElementById("create-form");
-const joinForm = document.getElementById("join-form");
-const nameInput = document.getElementById("display-name");
-const gameTypeSelect = document.getElementById("game-type-select");
-const joinCodeInput = document.getElementById("join-code");
-const waitingRoom = document.getElementById("waiting-room");
-const setupPanel = document.getElementById("setup-panel");
-const playerList = document.getElementById("player-list");
-const roomCodeLabel = document.getElementById("room-code-label");
-const startBtn = document.getElementById("start-btn");
-const errorEl = document.getElementById("lobby-error");
+// Elements
+const setupScreen  = document.getElementById("setup-screen");
+const waitingRoom  = document.getElementById("waiting-room");
+const nameInput    = document.getElementById("display-name");
+const createBtn    = document.getElementById("create-btn");
+const joinCodeInput= document.getElementById("join-code");
+const joinBtn      = document.getElementById("join-btn");
+const playerList   = document.getElementById("player-list");
+const roomCodeLabel= document.getElementById("room-code-label");
+const waitingGameLabel = document.getElementById("waiting-game-label");
+const startBtn     = document.getElementById("start-btn");
+const errorEl      = document.getElementById("lobby-error");
+const startErrorEl = document.getElementById("start-error");
+const hintEl       = document.getElementById("selection-hint");
+const playerLabel  = document.getElementById("player-label");
 
-let currentRoomId = null;
-let currentGameType = "skribbl";
-let isHost = false;
-let roomChannel = null;
+// State
+let selectedGameType = null;
+let currentRoomId    = null;
+let currentGameType  = null;
+let isHost           = false;
+let roomChannel      = null;
 
-document.getElementById("player-label").textContent =
+playerLabel.textContent =
   localStorage.getItem("ts_label") ? `Playing as ${localStorage.getItem("ts_label")}` : "";
 
-createForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+// ---------- Game card selection ----------
+
+document.querySelectorAll(".game-card").forEach(card => {
+  card.addEventListener("click", (e) => selectCard(card, e));
+  card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") selectCard(card, e); });
+});
+
+function selectCard(card, event) {
+  document.querySelectorAll(".game-card").forEach(c => c.classList.remove("selected"));
+  card.classList.add("selected");
+  selectedGameType = card.dataset.game;
+
+  hintEl.textContent = `${card.dataset.name} selected — enter your name and create a room`;
+  hintEl.classList.add("visible");
+  createBtn.disabled = false;
+
+  // Ripple
+  if (event && event.clientX) {
+    const rect = card.getBoundingClientRect();
+    const ripple = document.createElement("span");
+    ripple.className = "ripple";
+    ripple.style.cssText =
+      `left:${event.clientX - rect.left}px;top:${event.clientY - rect.top}px;width:60px;height:60px;margin-left:-30px;margin-top:-30px`;
+    card.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 520);
+  }
+}
+
+// ---------- Create room ----------
+
+createBtn.addEventListener("click", async () => {
   const name = nameInput.value.trim();
-  if (!name) return;
+  if (!name) { showError("Enter your display name first."); return; }
+  if (!selectedGameType) { showError("Pick a game first."); return; }
+
+  createBtn.disabled = true;
+  createBtn.textContent = "Creating...";
 
   for (let attempt = 0; attempt < 5; attempt++) {
     const code = randomRoomCode();
     const { data: room, error } = await supabase
       .from("rooms")
-      .insert({ room_code: code, host_user_id: session.user.id, game_type: gameTypeSelect.value })
+      .insert({ room_code: code, host_user_id: session.user.id, game_type: selectedGameType })
       .select()
       .single();
 
@@ -43,19 +82,28 @@ createForm.addEventListener("submit", async (e) => {
       await joinAsPlayer(room.id, name);
       return;
     }
-    if (error.code !== "23505") { // not a unique-violation, something else is wrong
+    if (error.code !== "23505") {
       showError(error.message);
+      createBtn.disabled = false;
+      createBtn.textContent = "Create room";
       return;
     }
   }
-  showError("Couldn't generate a free room code, please try again.");
+  showError("Couldn't generate a room code — please try again.");
+  createBtn.disabled = false;
+  createBtn.textContent = "Create room";
 });
 
-joinForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+// ---------- Join room ----------
+
+joinBtn.addEventListener("click", async () => {
   const name = nameInput.value.trim();
   const code = joinCodeInput.value.trim().toUpperCase();
-  if (!name || !code) return;
+  if (!name) { showError("Enter your display name first."); return; }
+  if (!code)  { showError("Enter a room code to join."); return; }
+
+  joinBtn.disabled = true;
+  joinBtn.textContent = "Joining...";
 
   const { data: room, error } = await supabase
     .from("rooms")
@@ -65,10 +113,14 @@ joinForm.addEventListener("submit", async (e) => {
 
   if (error || !room) {
     showError("No room found with that code.");
+    joinBtn.disabled = false;
+    joinBtn.textContent = "Join room";
     return;
   }
   if (room.status !== "lobby") {
     showError("That game has already started.");
+    joinBtn.disabled = false;
+    joinBtn.textContent = "Join room";
     return;
   }
 
@@ -76,24 +128,33 @@ joinForm.addEventListener("submit", async (e) => {
   await joinAsPlayer(room.id, name);
 });
 
+// ---------- Join as player ----------
+
 async function joinAsPlayer(roomId, displayName) {
   const { error } = await supabase
     .from("players")
     .insert({ room_id: roomId, user_id: session.user.id, display_name: displayName });
 
-  if (error && error.code !== "23505") { // ignore "already joined" on reconnect
+  if (error && error.code !== "23505") {
     showError(error.message);
     return;
   }
 
   currentRoomId = roomId;
-  setupPanel.classList.add("hidden");
+
+  const { data: room } = await supabase
+    .from("rooms")
+    .select("room_code, game_type")
+    .eq("id", roomId)
+    .single();
+
+  currentGameType  = room.game_type;
+  roomCodeLabel.textContent = room.room_code;
+  waitingGameLabel.textContent = gameName(currentGameType);
+
+  setupScreen.classList.add("hidden");
   waitingRoom.classList.remove("hidden");
   startBtn.classList.toggle("hidden", !isHost);
-
-  const { data: room } = await supabase.from("rooms").select("room_code, game_type").eq("id", roomId).single();
-  roomCodeLabel.textContent = room.room_code;
-  currentGameType = room.game_type;
 
   await refreshPlayers();
 
@@ -101,21 +162,16 @@ async function joinAsPlayer(roomId, displayName) {
     onPlayersChange: refreshPlayers,
     onRoomChange: (payload) => {
       const status = payload.new.status;
-      if (currentGameType === "skribbl" && (status === "choosing" || status === "drawing")) {
+      if (currentGameType === "skribbl" && (status === "choosing" || status === "drawing"))
         window.location.href = `game.html?room=${roomId}`;
-      }
-      if (currentGameType === "codenames" && status === "team_setup") {
+      if (currentGameType === "codenames" && status === "team_setup")
         window.location.href = `codenames.html?room=${roomId}`;
-      }
-      if (currentGameType === "spyfall" && status === "active") {
+      if (currentGameType === "spyfall" && status === "active")
         window.location.href = `spyfall.html?room=${roomId}`;
-      }
-      if (currentGameType === "secret_hitler" && status === "active") {
+      if (currentGameType === "secret_hitler" && status === "active")
         window.location.href = `secrethitler.html?room=${roomId}`;
-      }
-      if (currentGameType === "gartic_phone" && status === "active") {
+      if (currentGameType === "gartic_phone" && status === "active")
         window.location.href = `garticphone.html?room=${roomId}`;
-      }
     },
   });
 }
@@ -123,46 +179,66 @@ async function joinAsPlayer(roomId, displayName) {
 async function refreshPlayers() {
   const { data: players } = await supabase
     .from("players")
-    .select("display_name, score")
+    .select("display_name")
     .eq("room_id", currentRoomId)
     .order("joined_at", { ascending: true });
 
   playerList.innerHTML = "";
-  (players || []).forEach((p) => {
+  (players || []).forEach(p => {
     const li = document.createElement("li");
     li.textContent = p.display_name;
     playerList.appendChild(li);
   });
 }
 
+// ---------- Start game ----------
+
 startBtn.addEventListener("click", async () => {
+  startBtn.disabled = true;
+  startBtn.textContent = "Starting...";
+  startErrorEl.textContent = "";
+
+  let error = null;
+
   if (currentGameType === "codenames") {
     await supabase.from("rooms").update({ status: "team_setup" }).eq("id", currentRoomId);
     window.location.href = `codenames.html?room=${currentRoomId}`;
-  } else if (currentGameType === "spyfall") {
-    const { error } = await supabase.rpc("spyfall_start_round", { p_room_id: currentRoomId });
-    if (error) { showError(error.message); return; }
-    window.location.href = `spyfall.html?room=${currentRoomId}`;
-  } else if (currentGameType === "secret_hitler") {
-    const { error } = await supabase.rpc("sh_start_game", { p_room_id: currentRoomId });
-    if (error) { showError(error.message); return; }
-    window.location.href = `secrethitler.html?room=${currentRoomId}`;
-  } else if (currentGameType === "gartic_phone") {
-    const { error } = await supabase.rpc("gp_start_game", { p_room_id: currentRoomId });
-    if (error) { showError(error.message); return; }
-    window.location.href = `garticphone.html?room=${currentRoomId}`;
-  } else {
+    return;
+  }
+  if (currentGameType === "spyfall") {
+    ({ error } = await supabase.rpc("spyfall_start_round", { p_room_id: currentRoomId }));
+    if (!error) { window.location.href = `spyfall.html?room=${currentRoomId}`; return; }
+  }
+  if (currentGameType === "secret_hitler") {
+    ({ error } = await supabase.rpc("sh_start_game", { p_room_id: currentRoomId }));
+    if (!error) { window.location.href = `secrethitler.html?room=${currentRoomId}`; return; }
+  }
+  if (currentGameType === "gartic_phone") {
+    ({ error } = await supabase.rpc("gp_start_game", { p_room_id: currentRoomId }));
+    if (!error) { window.location.href = `garticphone.html?room=${currentRoomId}`; return; }
+  }
+  if (currentGameType === "skribbl") {
     window.location.href = `game.html?room=${currentRoomId}&start=1`;
+    return;
+  }
+
+  if (error) {
+    startErrorEl.textContent = error.message;
+    startBtn.disabled = false;
+    startBtn.textContent = "Start game";
   }
 });
 
+// ---------- Helpers ----------
+
 function randomRoomCode() {
-  const words = ["FOX", "OWL", "ELK", "RAY", "JAY", "COD", "ANT", "BEE"];
-  const word = words[Math.floor(Math.random() * words.length)];
-  const digits = Math.floor(100 + Math.random() * 900);
-  return `${word}-${digits}`;
+  const words = ["FOX","OWL","ELK","RAY","JAY","COD","ANT","BEE"];
+  return `${words[Math.floor(Math.random() * words.length)]}-${Math.floor(100 + Math.random() * 900)}`;
 }
 
-function showError(msg) {
-  errorEl.textContent = msg;
+function gameName(type) {
+  return { skribbl:"Team Skribbl", codenames:"Codenames", spyfall:"Spyfall",
+           secret_hitler:"Secret Hitler", gartic_phone:"Gartic Phone" }[type] || type;
 }
+
+function showError(msg) { errorEl.textContent = msg; }
