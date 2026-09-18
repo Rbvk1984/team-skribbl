@@ -16,6 +16,7 @@ const playerList   = document.getElementById("player-list");
 const roomCodeLabel= document.getElementById("room-code-label");
 const waitingGameLabel = document.getElementById("waiting-game-label");
 const startBtn     = document.getElementById("start-btn");
+const shareBtn     = document.getElementById("share-btn");
 const errorEl      = document.getElementById("lobby-error");
 const startErrorEl = document.getElementById("start-error");
 const hintEl       = document.getElementById("selection-hint");
@@ -151,6 +152,20 @@ async function joinAsPlayer(roomId, displayName) {
   currentGameType  = room.game_type;
   roomCodeLabel.textContent = room.room_code;
   waitingGameLabel.textContent = gameName(currentGameType);
+
+  // Share button — uses native share sheet on mobile, falls back to clipboard on desktop
+  shareBtn.addEventListener("click", async () => {
+    const text = `Join my ${gameName(currentGameType)} game! Room code: ${room.room_code}\n${window.location.origin}/team-skribbl/lobby.html`;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Team Games", text });
+      } catch (_) { /* user cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(room.room_code);
+      shareBtn.textContent = "✓ Code copied!";
+      setTimeout(() => { shareBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="3" r="2" stroke="#3dd68c" stroke-width="1.5"/><circle cx="14" cy="15" r="2" stroke="#3dd68c" stroke-width="1.5"/><circle cx="4" cy="9" r="2" stroke="#3dd68c" stroke-width="1.5"/><line x1="6" y1="8" x2="12" y2="4.2" stroke="#3dd68c" stroke-width="1.5" stroke-linecap="round"/><line x1="6" y1="10" x2="12" y2="13.8" stroke="#3dd68c" stroke-width="1.5" stroke-linecap="round"/></svg> Share room code`; }, 2000);
+    }
+  });
 
   setupScreen.classList.add("hidden");
   waitingRoom.classList.remove("hidden");

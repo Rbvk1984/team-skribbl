@@ -424,3 +424,59 @@
 @media (max-width: 380px) {
   .games-grid { grid-template-columns: 1fr; }
 }
+
+/* ---- Share button ---- */
+.share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  background: rgba(61,214,140,0.12);
+  border: 1.5px solid rgba(61,214,140,0.35);
+  border-radius: 12px;
+  color: #3dd68c;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background 0.15s;
+}
+.share-btn:hover { background: rgba(61,214,140,0.2); }
+.share-btn svg { flex-shrink: 0; }
+
+/* ---- Mobile lobby overrides ---- */
+@media (max-width: 640px) {
+  #setup-screen { padding: 24px 14px 50px; }
+
+  .lh-brand { font-size: 1.35rem; }
+
+  /* 2 columns on phones */
+  .games-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .card-art { height: 100px; }
+  .art-icon svg { width: 44px; height: 44px; }
+  .card-title { font-size: 12.5px; }
+  .card-desc { font-size: 10.5px; }
+  .card-pip { font-size: 9px; padding: 2px 7px; }
+
+  /* Controls stack vertically */
+  .lobby-controls { flex-direction: column; gap: 8px; }
+  .lobby-btn-primary { width: 100%; padding: 15px; font-size: 15px; }
+  .lobby-input { font-size: 16px; }
+
+  /* Join row stacks */
+  .join-row { flex-direction: column; gap: 8px; }
+  .lobby-input-code { width: 100%; font-size: 16px; }
+  .lobby-btn-ghost { width: 100%; text-align: center; padding: 13px; }
+
+  /* Waiting card full width */
+  .waiting-card { padding: 24px 18px; }
+  .room-code-big { font-size: 2.2rem; }
+  .lobby-btn-primary.hidden + .waiting-hint { margin-top: 4px; }
+}
+
+@media (max-width: 400px) {
+  .games-grid { grid-template-columns: 1fr; }
+}

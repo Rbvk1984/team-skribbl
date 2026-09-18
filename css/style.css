@@ -746,3 +746,219 @@ button:disabled { opacity: 0.6; cursor: default; }
 .gp-slide-text { font-family: "Caveat", cursive; font-size: 1.6rem; margin: 0; }
 .gp-slide-canvas { width: 100%; height: 240px; background: #fff; border-radius: 8px; display: block; }
 .gp-reveal-nav { display: flex; gap: 10px; margin-top: 18px; padding-bottom: 40px; }
+
+/* ==========================================================
+   MOBILE PASS — all game screens
+   ========================================================== */
+
+/* ---- Global: prevent iOS auto-zoom on input focus ---- */
+@media (max-width: 640px) {
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* ---- Global: minimum tap targets ---- */
+button { min-height: 44px; }
+.btn-primary, .btn-secondary { min-height: 48px; }
+
+/* ---- Global: canvas always blocks scroll while drawing ---- */
+canvas { touch-action: none; }
+
+/* ==========================================================
+   Passcode / index screen
+   ========================================================== */
+@media (max-width: 640px) {
+  .center-stage { padding: 16px; align-items: flex-start; padding-top: 40px; }
+  .card { padding: 24px 20px; }
+}
+
+/* ==========================================================
+   Skribbl game — mobile layout
+   ========================================================== */
+@media (max-width: 720px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-areas:
+      "status"
+      "board"
+      "guess"
+      "side";
+    height: auto;
+    min-height: 100vh;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  /* Canvas panel fills width, fixed height on mobile */
+  .board-panel { min-height: 280px; }
+  #board { min-height: 250px; cursor: crosshair; }
+
+  /* Toolbar scrolls horizontally so it never wraps */
+  #toolbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+    gap: 8px;
+  }
+  #toolbar::-webkit-scrollbar { display: none; }
+
+  /* Brush size buttons bigger for finger tapping */
+  .brush-size { width: 38px; height: 38px; flex-shrink: 0; }
+  #color-picker { width: 48px; height: 40px; flex-shrink: 0; }
+  #clear-btn { flex-shrink: 0; white-space: nowrap; }
+
+  /* Scoreboard compact on mobile */
+  .side-panel { max-height: 180px; overflow-y: auto; }
+  #scoreboard li { padding: 5px 8px; font-size: 0.85rem; }
+
+  /* Guess input + chat */
+  .chat-panel { max-height: 160px; }
+  #guess-form { flex-direction: row; gap: 8px; }
+  #guess-input { font-size: 16px; }
+
+  /* Status bar smaller on mobile */
+  #status-bar { font-size: 1.2rem; gap: 8px; flex-wrap: wrap; }
+  #timer { font-size: 0.85rem; }
+  #word-hint { font-size: 0.8rem; }
+
+  /* Word choice modal */
+  .modal-box { padding: 20px 16px; width: 90vw; }
+  .word-choice-btn { padding: 12px; font-size: 1rem; }
+}
+
+/* ==========================================================
+   Codenames — mobile layout
+   ========================================================== */
+@media (max-width: 900px) {
+  .codenames-layout {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "status"
+      "board"
+      "side";
+    min-height: 100vh;
+    height: auto;
+    padding: 10px;
+    gap: 10px;
+  }
+  .cn-side-panel { flex-direction: row; flex-wrap: wrap; gap: 10px; }
+  #clue-form { width: 100%; }
+}
+
+@media (max-width: 640px) {
+  /* Smaller cards so the 5×5 grid fits on phones */
+  .cn-board { gap: 5px; }
+  .cn-card {
+    font-size: 0.65rem;
+    padding: 6px 4px;
+    border-radius: 6px;
+    min-height: 48px;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  .cn-status-bar { font-size: 1.1rem; gap: 8px; flex-wrap: wrap; }
+  #cn-guesses-label { font-size: 0.78rem; }
+  .cn-score { font-size: 0.9rem; }
+
+  /* Clue form stacks on mobile */
+  #clue-form { display: flex; flex-direction: column; gap: 6px; }
+  #clue-form input { font-size: 16px; }
+  #clue-form button { width: 100%; }
+  #pass-turn-btn { width: 100%; }
+
+  /* Team setup */
+  .team-columns { grid-template-columns: 1fr; }
+  .team-col { padding: 12px; }
+  .btn-team { min-height: 46px; }
+}
+
+/* ==========================================================
+   Spyfall — mobile layout
+   ========================================================== */
+@media (max-width: 640px) {
+  .sf-card { max-width: 100%; padding: 20px 16px; }
+  .sf-role-label { font-size: 1.1rem; }
+  .sf-player-row { padding: 12px; }
+  .sf-vote-buttons { gap: 8px; }
+  .sf-ja-btn, .sf-nein-btn { padding: 14px 10px; font-size: 0.95rem; min-height: 52px; }
+  #sf-guess-input { font-size: 16px; }
+  .sf-timer { font-size: 1.6rem; }
+}
+
+/* ==========================================================
+   Secret Hitler — mobile layout
+   ========================================================== */
+@media (max-width: 640px) {
+  .sh-layout { padding: 12px 12px 40px; gap: 10px; }
+
+  /* Tracker pills smaller */
+  .sh-pip { width: 22px; height: 22px; border-radius: 4px; }
+  .sh-tracker-bar { gap: 8px; }
+  .sh-tracker-label { font-size: 0.7rem; }
+
+  /* Status bar */
+  .sh-status-bar { font-size: 1.1rem; padding: 10px 12px; }
+
+  /* Player rows bigger tap targets */
+  .sh-player-row { padding: 12px; min-height: 52px; }
+  .sh-tag { font-size: 0.7rem; padding: 2px 8px; }
+
+  /* Nominate list */
+  #sh-nominate-list .sh-player-row { min-height: 52px; }
+
+  /* Vote buttons big and easy to tap */
+  .sh-vote-buttons { gap: 10px; }
+  .sh-ja-btn   { min-height: 56px; font-size: 1.1rem; }
+  .sh-nein-btn { min-height: 56px; font-size: 1.1rem; }
+
+  /* Policy cards bigger */
+  .sh-card { padding: 20px 10px; font-size: 0.95rem; min-height: 80px; }
+
+  /* Executive list */
+  #sh-executive-list .sh-player-row { min-height: 52px; }
+
+  /* Role card */
+  #sh-role-label { font-size: 1rem; }
+  .sh-role-detail { font-size: 0.8rem; }
+}
+
+/* ==========================================================
+   Gartic Phone — mobile layout
+   ========================================================== */
+@media (max-width: 640px) {
+  /* Cards are already single-column via lobby.css but center-stage cards */
+  .gp-card { padding: 16px; max-width: 100%; }
+  .gp-draw-prompt { font-size: 1.3rem; padding: 8px 12px; }
+
+  /* Shorter canvas on phones so toolbar + submit button are visible without scrolling */
+  .gp-canvas-wrap { height: 240px; }
+  .gp-prev-canvas { height: 160px; }
+
+  /* Toolbar: single horizontal scrollable row, no wrapping */
+  .gp-toolbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    gap: 10px;
+  }
+  .gp-toolbar::-webkit-scrollbar { display: none; }
+  .gp-brush-btn { flex-shrink: 0; width: 38px; height: 38px; }
+  .gp-toolbar .btn-secondary { flex-shrink: 0; white-space: nowrap; padding: 8px 14px; }
+
+  /* Textarea */
+  .gp-textarea { font-size: 16px; min-height: 70px; }
+
+  /* Reveal */
+  .gp-slide-canvas { height: 180px; }
+  .gp-reveal-title { font-size: 1.5rem; }
+  .gp-reveal-nav { flex-direction: column; gap: 8px; }
+  .gp-reveal-nav button { width: 100%; }
+}
