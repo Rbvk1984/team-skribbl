@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gartic Phone</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Writing phase -->
+  <div id="write-screen" class="center-stage hidden">
+    <div class="card gp-card">
+      <h2 id="gp-write-heading">Write a starting prompt</h2>
+      <p id="gp-write-subheading" class="gp-subheading"></p>
+
+      <!-- Previous drawing (shown from round 3 onwards when describing a drawing) -->
+      <div id="gp-prev-drawing-box" class="hidden">
+        <canvas id="gp-prev-canvas" class="gp-prev-canvas"></canvas>
+      </div>
+
+      <textarea id="gp-text-input" class="gp-textarea" placeholder="Write your phrase..."></textarea>
+      <button id="gp-submit-text-btn" class="btn-primary" style="margin-top:12px;">Submit</button>
+
+      <p id="gp-waiting-msg" class="gp-waiting hidden">Waiting for others to finish...</p>
+      <p id="gp-progress" class="gp-progress"></p>
+      <p class="error-text" id="gp-write-error"></p>
+    </div>
+  </div>
+
+  <!-- Drawing phase -->
+  <div id="draw-screen" class="center-stage hidden">
+    <div class="card gp-card" style="max-width:620px;">
+      <h2>Draw this:</h2>
+      <p id="gp-draw-prompt" class="gp-draw-prompt"></p>
+
+      <div class="gp-canvas-wrap">
+        <canvas id="gp-canvas" class="gp-canvas"></canvas>
+      </div>
+
+      <div class="gp-toolbar">
+        <input type="color" id="gp-color" value="#1c1c1c" />
+        <button class="gp-brush-btn" data-size="2">·</button>
+        <button class="gp-brush-btn" data-size="5">•</button>
+        <button class="gp-brush-btn" data-size="10">⬤</button>
+        <button id="gp-eraser-btn" class="btn-secondary">Eraser</button>
+        <button id="gp-clear-btn"  class="btn-secondary">Clear</button>
+      </div>
+
+      <button id="gp-submit-draw-btn" class="btn-primary" style="margin-top:12px;">Submit drawing</button>
+      <p id="gp-draw-waiting" class="gp-waiting hidden">Waiting for others...</p>
+      <p id="gp-draw-progress" class="gp-progress"></p>
+      <p class="error-text" id="gp-draw-error"></p>
+    </div>
+  </div>
+
+  <!-- Reveal phase -->
+  <div id="reveal-screen" class="center-stage hidden">
+    <div class="gp-reveal-wrap">
+      <h2 id="gp-reveal-title" class="gp-reveal-title"></h2>
+
+      <div id="gp-slideshow" class="gp-slideshow">
+        <!-- Entries rendered here step by step -->
+      </div>
+
+      <div class="gp-reveal-nav">
+        <button id="gp-next-entry-btn" class="btn-primary">Next →</button>
+        <button id="gp-next-book-btn"  class="btn-secondary hidden">Next book →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- End screen -->
+  <div id="gp-end-screen" class="center-stage hidden">
+    <div class="card">
+      <h1>That's a wrap!</h1>
+      <p>Hope it was a disaster in the best way.</p>
+      <a href="lobby.html"><button class="btn-primary">Back to lobby</button></a>
+    </div>
+  </div>
+
+  <script type="module" src="js/garticphone.js"></script>
+</body>
+</html>

@@ -113,6 +113,9 @@ async function joinAsPlayer(roomId, displayName) {
       if (currentGameType === "secret_hitler" && status === "active") {
         window.location.href = `secrethitler.html?room=${roomId}`;
       }
+      if (currentGameType === "gartic_phone" && status === "active") {
+        window.location.href = `garticphone.html?room=${roomId}`;
+      }
     },
   });
 }
@@ -144,6 +147,10 @@ startBtn.addEventListener("click", async () => {
     const { error } = await supabase.rpc("sh_start_game", { p_room_id: currentRoomId });
     if (error) { showError(error.message); return; }
     window.location.href = `secrethitler.html?room=${currentRoomId}`;
+  } else if (currentGameType === "gartic_phone") {
+    const { error } = await supabase.rpc("gp_start_game", { p_room_id: currentRoomId });
+    if (error) { showError(error.message); return; }
+    window.location.href = `garticphone.html?room=${currentRoomId}`;
   } else {
     window.location.href = `game.html?room=${currentRoomId}&start=1`;
   }

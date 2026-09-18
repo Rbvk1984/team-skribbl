@@ -108,6 +108,17 @@ export function connectRoomChannel(roomId, handlers = {}) {
     channel.on("broadcast", { event: "sh_game_signal" }, handlers.onSHGameChange);
   }
 
+  // Gartic Phone: gp_games holds no secrets (just round number,
+  // status, submission count) so a normal Postgres Changes
+  // subscription is safe here — no broadcast workaround needed.
+  if (handlers.onGPGameChange) {
+    channel.on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "gp_games", filter: `room_id=eq.${roomId}` },
+      handlers.onGPGameChange
+    );
+  }
+
   channel.subscribe();
 
   return {

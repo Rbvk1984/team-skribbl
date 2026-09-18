@@ -691,3 +691,58 @@ button:disabled { opacity: 0.6; cursor: default; }
       "guess";
   }
 }
+
+/* ---------- Gartic Phone ---------- */
+
+.gp-card { max-width: 560px; }
+.gp-subheading { font-size: 0.9rem; color: var(--ink-soft); margin-top: -8px; }
+
+.gp-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.gp-prev-canvas {
+  width: 100%;
+  height: 220px;
+  background: #fff;
+  border-radius: 8px;
+  border: 2px solid var(--line);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.gp-canvas-wrap { width: 100%; height: 320px; border-radius: 8px; overflow: hidden; }
+.gp-canvas { width: 100%; height: 100%; background: #fff; touch-action: none; cursor: crosshair; display: block; }
+
+.gp-toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+.gp-toolbar input[type="color"] { width: 40px; height: 32px; padding: 0; border: none; }
+.gp-brush-btn { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--ink); background: var(--chalk-cream); }
+
+.gp-draw-prompt {
+  font-family: "Caveat", cursive;
+  font-size: 1.6rem;
+  color: var(--ink);
+  background: var(--marker-yellow);
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin: 0 0 10px;
+}
+
+.gp-waiting  { font-size: 0.85rem; color: var(--ink-soft); margin-top: 10px; }
+.gp-progress { font-size: 0.8rem;  color: var(--ink-soft); margin: 4px 0 0; }
+
+.gp-reveal-wrap { max-width: 640px; width: 100%; padding: 20px 16px; margin: 0 auto; }
+.gp-reveal-title { font-family: "Caveat", cursive; font-size: 2rem; color: var(--chalk-cream); margin-bottom: 16px; }
+.gp-slideshow { display: flex; flex-direction: column; gap: 16px; }
+.gp-slide { background: var(--chalk-cream); border-radius: var(--radius); padding: 14px; }
+.gp-slide-author { font-size: 0.8rem; color: var(--ink-soft); margin: 0 0 8px; }
+.gp-slide-text { font-family: "Caveat", cursive; font-size: 1.6rem; margin: 0; }
+.gp-slide-canvas { width: 100%; height: 240px; background: #fff; border-radius: 8px; display: block; }
+.gp-reveal-nav { display: flex; gap: 10px; margin-top: 18px; padding-bottom: 40px; }
