@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Team Skribbl — Enter</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="center-stage">
+    <div class="card">
+      <div class="brand"><span class="dot"></span><h1>Team Skribbl</h1></div>
+      <p>Enter the passcode your admin gave you to get in.</p>
+
+      <form id="access-form">
+        <label for="passcode-input">Passcode</label>
+        <input type="password" id="passcode-input" autocomplete="off" required autofocus />
+        <button type="submit" id="access-submit" class="btn-primary">Enter</button>
+      </form>
+      <p class="error-text" id="access-error"></p>
+    </div>
+  </div>
+
+  <script type="module" src="js/access.js"></script>
+</body>
+</html>

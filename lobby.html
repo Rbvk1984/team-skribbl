@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Team Skribbl — Lobby</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="center-stage">
+    <div class="card">
+      <div class="brand"><span class="dot"></span><h1>Team Skribbl</h1></div>
+      <p id="player-label"></p>
+
+      <div id="setup-panel">
+        <label for="display-name">Your name</label>
+        <input type="text" id="display-name" required autofocus />
+
+        <form id="create-form">
+          <button type="submit" class="btn-primary">Create a new room</button>
+        </form>
+
+        <div class="divider">or join one</div>
+
+        <form id="join-form">
+          <label for="join-code">Room code</label>
+          <input type="text" id="join-code" placeholder="FOX-427" />
+          <button type="submit" class="btn-secondary" style="width:100%; margin-top:12px;">Join room</button>
+        </form>
+
+        <p class="error-text" id="lobby-error"></p>
+      </div>
+
+      <div id="waiting-room" class="hidden">
+        <p>Room code — share this with your team:</p>
+        <div class="room-code-display" id="room-code-label"></div>
+        <ul id="player-list"></ul>
+        <button id="start-btn" class="btn-primary hidden">Start game</button>
+        <p style="font-size:0.85rem;">Waiting for the host to start...</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/lobby.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Team Skribbl — Playing</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="game-screen" class="game-layout">
+    <div id="status-bar">
+      <span id="status-text">Loading...</span>
+      <span id="timer"></span>
+      <span id="word-hint"></span>
+    </div>
+
+    <div class="board-panel">
+      <canvas id="board"></canvas>
+      <div id="toolbar" class="hidden">
+        <input type="color" id="color-picker" value="#1c1c1c" />
+        <button class="brush-size" data-size="2" style="background:#1c1c1c;"></button>
+        <button class="brush-size" data-size="5" style="background:#1c1c1c;"></button>
+        <button class="brush-size" data-size="10" style="background:#1c1c1c;"></button>
+        <button id="clear-btn" class="btn-secondary">Clear</button>
+      </div>
+    </div>
+
+    <div class="side-panel">
+      <ul id="scoreboard"></ul>
+      <div class="chat-panel">
+        <ul id="guess-log"></ul>
+      </div>
+    </div>
+
+    <form id="guess-form">
+      <input type="text" id="guess-input" placeholder="Type your guess..." autocomplete="off" />
+      <button type="submit" class="btn-primary" style="margin-top:0;">Send</button>
+    </form>
+  </div>
+
+  <div id="word-choice-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <h2>Pick a word</h2>
+      <div id="word-choices"></div>
+    </div>
+  </div>
+
+  <div id="final-screen" class="center-stage hidden">
+    <div class="card">
+      <h1>Final scores</h1>
+      <ul id="final-scoreboard"></ul>
+      <a href="lobby.html"><button class="btn-primary">Back to lobby</button></a>
+    </div>
+  </div>
+
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>

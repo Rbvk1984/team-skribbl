@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Team Skribbl — Admin</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="brand"><span class="dot"></span><h1>Admin</h1></div>
+    <p>Create a passcode for each team member. Give it to them directly (chat, in person) — it's only shown here once.</p>
+
+    <form id="create-code-form" class="card" style="max-width:none;">
+      <label for="code-label">Team member name</label>
+      <input type="text" id="code-label" required />
+
+      <label for="code-value">Passcode to give them</label>
+      <input type="text" id="code-value" required placeholder="e.g. a short memorable phrase" />
+
+      <label style="display:flex; align-items:center; gap:8px; margin-top:16px;">
+        <input type="checkbox" id="code-is-admin" style="width:auto;" />
+        Grant admin access too
+      </label>
+
+      <button type="submit" class="btn-primary">Create passcode</button>
+    </form>
+
+    <div id="new-code-banner" class="banner hidden"></div>
+
+    <h2 style="margin-top:32px; color:var(--chalk-cream);">Existing passcodes</h2>
+    <ul id="code-list"></ul>
+
+    <p style="margin-top:24px;"><a href="lobby.html">Go to lobby →</a></p>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>
