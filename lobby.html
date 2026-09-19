@@ -10,6 +10,13 @@
   <link rel="stylesheet" href="css/lobby.css" />
   <link rel="stylesheet" href="css/help.css" />
   <link rel="stylesheet" href="css/premium.css"/>
+  <style>
+    /* High-specificity dark background — wins over all !important rules in external CSS */
+    html { background: #080f0a; }
+    html body, html body.lobby-body { background: #080f0a !important; color: #f0ece0 !important; }
+    /* Ensure setup screen and waiting room are also dark */
+    #setup-screen, #waiting-room { background: transparent !important; }
+  </style>
 </head>
 <body class="lobby-body" data-page="lobby" style="background:#080f0a; min-height:100vh; color:#f0ece0;">
 <div class="aurora" aria-hidden="true"><div class="ab ab1"></div><div class="ab ab2"></div><div class="ab ab3"></div><div class="ab ab4"></div></div>
