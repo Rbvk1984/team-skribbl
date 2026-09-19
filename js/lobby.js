@@ -32,7 +32,11 @@ let roomChannel      = null;
 playerLabel.textContent =
   localStorage.getItem("ts_label") ? `Playing as ${localStorage.getItem("ts_label")}` : "";
 
-// Pre-select game if player came from a specific game card on the landing page
+// Enable create button only when BOTH a game is selected AND a name is typed
+nameInput.addEventListener("input", () => {
+  createBtn.disabled = !nameInput.value.trim() || !selectedGameType;
+  if (nameInput.value.trim()) errorEl.textContent = "";
+});
 const pendingGame = localStorage.getItem("tp_pending_game");
 if (pendingGame) {
   const pendingCard = document.querySelector(`.game-card[data-game="${pendingGame}"]`);
@@ -55,9 +59,9 @@ function selectCard(card, event) {
   card.classList.add("selected");
   selectedGameType = card.dataset.game;
 
-  hintEl.textContent = `${card.dataset.name} selected — enter your name and create a room`;
+  hintEl.textContent = `${card.dataset.name} selected — type your name below and create a room`;
   hintEl.classList.add("visible");
-  createBtn.disabled = false;
+  createBtn.disabled = !nameInput.value.trim();
 
   // Ripple
   if (event && event.clientX) {
