@@ -631,3 +631,130 @@
   min-height: 18px;
   font-weight: 500;
 }
+
+/* ============================================================
+   LOBBY CONTROLS — hardcoded dark, no CSS variable dependency
+   ============================================================ */
+
+.lobby-name-section {
+  margin-bottom: 12px;
+}
+.lobby-name-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(240,236,224,0.4);
+  margin-bottom: 8px;
+}
+
+/* The big visible name input */
+.lobby-name-input {
+  display: block;
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.07);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+  font-size: 18px;
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 500;
+  color: #f0ece0;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+  -webkit-appearance: none;
+}
+.lobby-name-input:focus {
+  border-color: #3dd68c;
+  background: rgba(61,214,140,0.06);
+  box-shadow: 0 0 0 4px rgba(61,214,140,0.14);
+}
+.lobby-name-input::placeholder {
+  color: rgba(240,236,224,0.25);
+  font-weight: 400;
+}
+
+/* Full-width Create room button */
+.lobby-create-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  background: #3dd68c;
+  color: #080f0a;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: "Inter", system-ui, sans-serif;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 4px;
+  transition: background 0.15s, box-shadow 0.2s, transform 0.1s, opacity 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+.lobby-create-btn:not(:disabled):hover {
+  background: #52e8a4;
+  box-shadow: 0 0 28px rgba(61,214,140,0.35);
+}
+.lobby-create-btn:active { transform: scale(0.98); }
+.lobby-create-btn:disabled {
+  background: rgba(61,214,140,0.18);
+  color: rgba(8,15,10,0.45);
+  cursor: not-allowed;
+}
+/* Shimmer on enabled create button */
+.lobby-create-btn:not(:disabled)::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -80%; bottom: 0;
+  width: 50%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transform: skewX(-20deg);
+  animation: createShimmer 3s ease-in-out 0.5s infinite;
+}
+@keyframes createShimmer {
+  0%   { left: -80%; }
+  25%  { left: 120%; }
+  100% { left: 120%; }
+}
+
+/* Join row */
+.join-row { display: flex; gap: 10px; }
+.lobby-join-btn {
+  padding: 16px 22px;
+  background: rgba(255,255,255,0.07);
+  border: 2px solid rgba(255,255,255,0.18);
+  color: #f0ece0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: "Inter", system-ui, sans-serif;
+  border-radius: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+  -webkit-appearance: none;
+}
+.lobby-join-btn:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.3);
+}
+
+/* Error */
+.lobby-error {
+  color: #e85d4e !important;
+  font-size: 0.85rem;
+  font-weight: 500;
+  min-height: 20px;
+  margin-top: 10px;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .lobby-name-input { font-size: 16px; padding: 14px 16px; }
+  .lobby-create-btn { font-size: 0.95rem; padding: 15px; }
+  .join-row { flex-direction: column; }
+  .lobby-join-btn { width: 100%; text-align: center; }
+}

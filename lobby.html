@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="css/help.css" />
   <link rel="stylesheet" href="css/premium.css"/>
 </head>
-<body class="lobby-body" data-page="lobby">
+<body class="lobby-body" data-page="lobby" style="background:#080f0a; min-height:100vh; color:#f0ece0;">
 <div class="aurora" aria-hidden="true"><div class="ab ab1"></div><div class="ab ab2"></div><div class="ab ab3"></div><div class="ab ab4"></div></div>
 
   <div id="setup-screen">
@@ -141,19 +141,31 @@
 
     <p class="selection-hint" id="selection-hint">← pick a game to get started</p>
 
+    <!-- Name entry — full width, very visible -->
     <div class="lobby-name-section">
-      <label class="lobby-name-label" for="display-name">Your display name</label>
-      <div class="lobby-controls">
-        <input type="text" id="display-name" class="lobby-input" placeholder="e.g. Vijay" autocomplete="off" />
-        <button id="create-btn" class="lobby-btn-primary" disabled>Create room</button>
-      </div>
+      <label class="lobby-name-label" for="display-name">YOUR DISPLAY NAME</label>
+      <input
+        type="text"
+        id="display-name"
+        class="lobby-name-input"
+        placeholder="Type your name here..."
+        autocomplete="off"
+        spellcheck="false"
+      />
     </div>
 
-    <div class="or-row"><span>or join one</span></div>
+    <button id="create-btn" class="lobby-create-btn" disabled>
+      Create room
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M4 9h10M9 4l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <div class="or-row"><span>or join an existing room</span></div>
 
     <div class="join-row">
-      <input type="text" id="join-code" class="lobby-input-code" placeholder="Room code — e.g. FOX-427" autocomplete="off" />
-      <button id="join-btn" class="lobby-btn-ghost">Join room</button>
+      <input type="text" id="join-code" class="lobby-name-input" style="letter-spacing:0.08em; text-transform:uppercase;" placeholder="Room code — e.g. FOX-427" autocomplete="off" />
+      <button id="join-btn" class="lobby-join-btn">Join room</button>
     </div>
 
     <p class="error-text lobby-error" id="lobby-error"></p>
@@ -182,7 +194,7 @@
         <div class="waiting-dot"></div>
         <div class="waiting-dot"></div>
       </div>
-      <button id="start-btn" class="lobby-btn-primary hidden" style="width:100%;">Start game</button>
+      <button id="start-btn" class="lobby-create-btn hidden" style="width:100%;">Start game</button>
       <p class="waiting-hint" id="waiting-hint">Waiting for the host to start...</p>
       <p class="error-text" id="start-error"></p>
     </div>
