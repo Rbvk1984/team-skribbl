@@ -177,12 +177,14 @@
       </div>
       <h2>Welcome back</h2>
       <p>Enter the passcode your admin gave you to access the games.</p>
-      <label class="access-label" for="passcode-input">Passcode</label>
-      <input type="password" id="passcode-input" class="access-input" autocomplete="off" required autofocus placeholder="Your personal passcode"/>
-      <div class="access-btn-wrap">
-        <button type="button" id="access-submit" class="access-btn">Enter TeamPlay</button>
-      </div>
-      <p class="access-error" id="access-error"></p>
+      <form id="access-form">
+        <label class="access-label" for="passcode-input">Passcode</label>
+        <input type="password" id="passcode-input" class="access-input" autocomplete="off" required autofocus placeholder="Your personal passcode"/>
+        <div class="access-btn-wrap">
+          <button type="submit" id="access-submit" class="access-btn">Enter TeamPlay</button>
+        </div>
+        <p class="access-error" id="access-error"></p>
+      </form>
       <a href="index.html" class="access-back">← Back to home</a>
     </div>
   </div>
